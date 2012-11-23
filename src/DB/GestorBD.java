@@ -1,6 +1,10 @@
+package DB;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import Usuario.Usuario;
 
 public class GestorBD {
 	private Connection conexion;
@@ -30,16 +34,7 @@ public class GestorBD {
 			System.out.println("Conectting");
 			Class.forName("org.sqlite.JDBC");
 			conexion = DriverManager
-					.getConnection("jdbc:sqlite:files/Reversi.s3db"); // Conectar
-																		// con X
-																		// base
-																		// de
-																		// datos
-																		// a Y
-																		// archivo,
-																		// por
-																		// eso
-			// jdbc:sqlite:
+					.getConnection("jdbc:sqlite:files/Reversi.s3db"); // Conectar con X base de datos a Y archivo, por eso jdbc:sqlite:
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -58,5 +53,28 @@ public class GestorBD {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void insertarUsuario(String login, String pass) throws SQLException {
+		PreparedStatement smt;
+		smt = conexion.prepareStatement("insert into USUARIO values(?,?)");
+		smt.setString(1, login);
+		smt.setString(2, pass);
+		smt.executeUpdate();
+	}
+	
+	public void borrarUsuario(String login) throws SQLException {
+		PreparedStatement smt;
+		smt = conexion.prepareStatement("DELETE FROM USUARIO WHERE LOGIN=?");
+		smt.setString(1, login);
+		smt.executeUpdate();
+	}
+	
+	public Usuario getUsuario(String login) throws SQLException {
+		PreparedStatement smt;
+		smt = conexion.prepareStatement("SELECT * FROM JUGADOR where LOGIN=?");
+		smt.setString(1, login);
+		ResultSet rs = smt.executeQuery();
+		return new Usuario(login,rs.getString(2));
 	}
 }
