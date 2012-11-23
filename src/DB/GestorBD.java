@@ -72,9 +72,23 @@ public class GestorBD {
 	
 	public Usuario getUsuario(String login) throws SQLException {
 		PreparedStatement smt;
-		smt = conexion.prepareStatement("SELECT * FROM JUGADOR where LOGIN=?");
+		smt = conexion.prepareStatement("SELECT * FROM USUARIO where LOGIN=?");
 		smt.setString(1, login);
 		ResultSet rs = smt.executeQuery();
 		return new Usuario(login,rs.getString(2));
+	}
+	
+	public void setPassword(String login, String password) {
+		PreparedStatement smt;
+		try {
+			smt = conexion
+					.prepareStatement("UPDATE USUARIO SET PASSWORD=? WHERE LOGIN=?");
+			smt.setString(1, password);
+			smt.setString(2, login);
+			smt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
