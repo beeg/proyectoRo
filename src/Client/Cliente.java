@@ -76,6 +76,34 @@ public class Cliente {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Metodo para activar un sensor. ON id_sensor
+	 * @param idSensor
+	 */
+	public void onSensor(int idSensor) {
+		try {
+			sm.Escribir("ON " + idSensor + '\n');
+			String primerMensaje = sm.Leer();
+			System.out.println(primerMensaje);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Metodo para desactivar un sensor. OFF id_sensor
+	 * @param idSensor
+	 */
+	public void offSensor(int idSensor) {
+		try {
+			sm.Escribir("OFF " + idSensor + '\n');
+			String primerMensaje = sm.Leer();
+			System.out.println(primerMensaje);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		try {
@@ -84,6 +112,8 @@ public class Cliente {
 			c.conectar();
 			c.listSensor();
 			c.historico(1);
+			c.onSensor(2);
+			c.offSensor(1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

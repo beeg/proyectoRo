@@ -70,6 +70,10 @@ public class Server {
 			tratarListSensor();
 		} else if (comando.equals("HISTORICO")) {
 			tratarHistorico(parametro);
+		} else if (comando.equals("ON")) {
+			tratarOnSensor(parametro);
+		} else if (comando.equals("OFF")) {
+			tratarOffSensor(parametro);
 		}
 	}
 
@@ -168,6 +172,85 @@ public class Server {
 		}
 
 	}
+	
+	public void tratarOnSensor(String parametro) {
+		try	{
+			boolean encontrado=false;
+			Sensor s=null;
+			try	{
+				int idSensor=Integer.parseInt(parametro);
+			
+				for(int i=0; i<lSensores.size() && !encontrado; i++)	{
+					if(lSensores.get(i).id==idSensor)	{
+						encontrado=true;
+						s=lSensores.get(i);
+					}
+				}
+			} catch (NumberFormatException e) {
+				mensajeEnviar = "417 ERR Sensor no existe.";
+				sM.Escribir(mensajeEnviar);	
+			}
+			
+			if(encontrado)	{
+				if(s.isEstado())	{ //ON
+					mensajeEnviar = "418 ERR Sensor en estado ON.";
+					sM.Escribir(mensajeEnviar);	
+				} else	{	//OFF
+					s.setEstado(true);
+					//actualizar en BD
+					mensajeEnviar = "203 OK Sensor activo.";
+					sM.Escribir(mensajeEnviar);	
+				}
+			} else	{
+				mensajeEnviar = "417 ERR Sensor no existe.";
+				sM.Escribir(mensajeEnviar);				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void tratarOffSensor(String parametro) {
+		try	{
+			boolean encontrado=false;
+			Sensor s=null;
+			try	{
+				int idSensor=Integer.parseInt(parametro);
+			
+				for(int i=0; i<lSensores.size() && !encontrado; i++)	{
+					if(lSensores.get(i).id==idSensor)	{
+						encontrado=true;
+						s=lSensores.get(i);
+					}
+				}
+			} catch (NumberFormatException e) {
+				mensajeEnviar = "417 ERR Sensor no existe.";
+				sM.Escribir(mensajeEnviar);	
+			}
+			
+			if(encontrado)	{
+				if(s.isEstado())	{ //OFF
+					mensajeEnviar = "419 ERR Sensor en estado OFF.";
+					sM.Escribir(mensajeEnviar);	
+				} else	{	//OFF
+					s.setEstado(false);
+					//actualizar en BD
+					mensajeEnviar = "204 OK Sensor desactivado.";
+					sM.Escribir(mensajeEnviar);	
+				}
+			} else	{
+				mensajeEnviar = "417 ERR Sensor no existe.";
+				sM.Escribir(mensajeEnviar);				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 
 	public static void main(String[] args) {
 		try {
@@ -175,6 +258,7 @@ public class Server {
 			SocketManager sM = new SocketManager(ss.accept());
 			Server s = new Server(1, sM);
 			s.activarServidor();
+			System.out.println("Servidor activo");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e1) {

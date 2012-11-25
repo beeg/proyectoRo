@@ -204,6 +204,20 @@ public class GestorBD {
 		return lMedidas;
 
 	}
+	
+	public void setEstadoSensor(int id, boolean est) {
+		PreparedStatement smt;
+		try {
+			smt = conexion
+					.prepareStatement("UPDATE SENSOR SET ESTADO=? WHERE ID=?");
+			smt.setBoolean(1, est);
+			smt.setInt(2, id);
+			smt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		GestorBD gestor = GestorBD.getInstance();
