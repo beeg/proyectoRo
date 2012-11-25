@@ -112,8 +112,10 @@ public class Cliente {
 			c.conectar();
 			c.listSensor();
 			c.historico(1);
+			c.historico(3);
 			c.onSensor(2);
 			c.offSensor(1);
+			System.out.println("Terminado");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

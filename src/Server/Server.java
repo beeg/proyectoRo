@@ -104,7 +104,7 @@ public class Server {
 		if (actualUser.getPassword().equals(parametro)) {
 			mensajeEnviar = "202 OK Bienvenido al sistema \n";
 		} else if (parametro.equals("")) {
-			mensajeEnviar = "403 ERR Falta la clave";
+			mensajeEnviar = "403 ERR Falta la clave \n";
 			actualUser = null;
 		} else {
 			mensajeEnviar = "402 OK La clave es incorrecta \n";
@@ -137,13 +137,14 @@ public class Server {
 	public void tratarHistorico(String parametro) {
 		try {
 			if (parametro.equals("")) {
-				mensajeEnviar = "415 ERR Falta parámetro id_sensor";
+				mensajeEnviar = "415 ERR Falta parámetro id_sensor\n";
 				sM.Escribir(mensajeEnviar);
 			} else {
 				try {
 					int idSensor = Integer.parseInt(parametro);
 					boolean encontrado = false;
 					Sensor sensor = null;
+					System.out.println(lSensores);
 					for (int i = 0; i < lSensores.size() && !encontrado; i++) {
 						sensor = lSensores.get(i);
 						if (sensor.getId() == idSensor) {
@@ -159,11 +160,11 @@ public class Server {
 						}
 						sM.Escribir(fin);
 					} else {
-						mensajeEnviar = "414 ERR Sensor desconocido";
+						mensajeEnviar = "414 ERR Sensor desconocido\n";
 						sM.Escribir(mensajeEnviar);
 					}
 				} catch (NumberFormatException e) {
-					mensajeEnviar = "414 ERR Sensor desconocido";
+					mensajeEnviar = "414 ERR Sensor desconocido\n";
 					sM.Escribir(mensajeEnviar);
 				}
 			}
@@ -187,22 +188,22 @@ public class Server {
 					}
 				}
 			} catch (NumberFormatException e) {
-				mensajeEnviar = "417 ERR Sensor no existe.";
+				mensajeEnviar = "417 ERR Sensor no existe.\n";
 				sM.Escribir(mensajeEnviar);	
 			}
 			
 			if(encontrado)	{
 				if(s.isEstado())	{ //ON
-					mensajeEnviar = "418 ERR Sensor en estado ON.";
+					mensajeEnviar = "418 ERR Sensor en estado ON.\n";
 					sM.Escribir(mensajeEnviar);	
 				} else	{	//OFF
 					s.setEstado(true);
 					//actualizar en BD
-					mensajeEnviar = "203 OK Sensor activo.";
+					mensajeEnviar = "203 OK Sensor activo.\n";
 					sM.Escribir(mensajeEnviar);	
 				}
 			} else	{
-				mensajeEnviar = "417 ERR Sensor no existe.";
+				mensajeEnviar = "417 ERR Sensor no existe.\n";
 				sM.Escribir(mensajeEnviar);				
 			}
 		} catch (IOException e) {
@@ -226,22 +227,22 @@ public class Server {
 					}
 				}
 			} catch (NumberFormatException e) {
-				mensajeEnviar = "417 ERR Sensor no existe.";
+				mensajeEnviar = "417 ERR Sensor no existe.\n";
 				sM.Escribir(mensajeEnviar);	
 			}
 			
 			if(encontrado)	{
 				if(s.isEstado())	{ //OFF
-					mensajeEnviar = "419 ERR Sensor en estado OFF.";
+					mensajeEnviar = "419 ERR Sensor en estado OFF.\n";
 					sM.Escribir(mensajeEnviar);	
 				} else	{	//OFF
 					s.setEstado(false);
 					//actualizar en BD
-					mensajeEnviar = "204 OK Sensor desactivado.";
+					mensajeEnviar = "204 OK Sensor desactivado.\n";
 					sM.Escribir(mensajeEnviar);	
 				}
 			} else	{
-				mensajeEnviar = "417 ERR Sensor no existe.";
+				mensajeEnviar = "417 ERR Sensor no existe.\n";
 				sM.Escribir(mensajeEnviar);				
 			}
 		} catch (IOException e) {
