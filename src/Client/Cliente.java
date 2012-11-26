@@ -104,7 +104,24 @@ public class Cliente {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void ONGPS(){
+		try {
+			sm.Escribir("ONGPS\n");
+			System.out.println(sm.Leer());
+		} catch (IOException e) {
+			System.out.println("Error en GPS en cliente");
+		}
+	}
+	
+	public void OFFGPS(){
+		try {
+			sm.Escribir("OFFGPS \n");
+			System.out.println(sm.Leer());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public static void main(String[] args) {
 		try {
 			SocketManager sm = new SocketManager("127.0.0.1", 5888);
@@ -115,6 +132,8 @@ public class Cliente {
 			c.historico(3);
 			c.onSensor(2);
 			c.offSensor(1);
+			c.OFFGPS();
+			c.ONGPS();
 			System.out.println("Terminado");
 		} catch (IOException e) {
 			e.printStackTrace();

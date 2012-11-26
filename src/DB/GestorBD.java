@@ -12,6 +12,7 @@ import Server.Medida;
 import Server.Sensor;
 import Server.Usuario;
 import Server.Vehiculo;
+import Util.SocketManager;
 
 public class GestorBD {
 	private Connection conexion;
@@ -130,12 +131,12 @@ public class GestorBD {
 		smt.executeUpdate();
 	}
 
-	public Vehiculo getVehiculo(int id) throws SQLException {
+	public Vehiculo getVehiculo(int id, SocketManager sm) throws SQLException {
 		PreparedStatement smt;
 		smt = conexion.prepareStatement("SELECT * FROM VEHICULO where ID=?");
 		smt.setInt(1, id);
 		ResultSet rs = smt.executeQuery();
-		return new Vehiculo(id, rs.getBoolean(2));
+		return new Vehiculo(id, rs.getBoolean(2),sm);
 	}
 
 	public void insertarSensor(String desc, boolean gps) throws SQLException {
