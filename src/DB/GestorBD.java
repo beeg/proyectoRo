@@ -136,7 +136,35 @@ public class GestorBD {
 		smt = conexion.prepareStatement("SELECT * FROM VEHICULO where ID=?");
 		smt.setInt(1, id);
 		ResultSet rs = smt.executeQuery();
-		return new Vehiculo(id, rs.getBoolean(2),sm);
+		return new Vehiculo(id, rs.getBoolean(2),rs.getString(3),rs.getString(4),sm);
+	}
+	
+	public void setLatitudVehiculo(int id, String lat) {
+		PreparedStatement smt;
+		try {
+			smt = conexion
+					.prepareStatement("UPDATE VEHICULO SET LATITUD=? WHERE ID=?");
+			smt.setString(1, lat);
+			smt.setInt(2, id);
+			smt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void setLongitudVehiculo(int id, String longitud) {
+		PreparedStatement smt;
+		try {
+			smt = conexion
+					.prepareStatement("UPDATE VEHICULO SET LONGITUD=? WHERE ID=?");
+			smt.setString(1, longitud);
+			smt.setInt(2, id);
+			smt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void insertarSensor(String desc, boolean gps) throws SQLException {

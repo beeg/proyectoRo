@@ -9,7 +9,7 @@ import Util.SocketManager;
 
 public class Vehiculo extends Thread {
 	int id;
-	boolean estado;
+	GPS gps;
 	Usuario actualUser;
 	SocketManager sM;
 	String mensajeEnviar;
@@ -22,10 +22,10 @@ public class Vehiculo extends Thread {
 	 * @param id
 	 * @param sM
 	 */
-	public Vehiculo(int id,boolean estado, SocketManager sM) {
+	public Vehiculo(int id, boolean estado, String latitud, String longitud, SocketManager sM) {
 		this.sM = sM;
 		this.id = id;
-		this.estado=estado;
+		this.gps = new GPS(estado,latitud,longitud);
 		GestorBD bd = GestorBD.getInstance();
 		bd.conectar();
 		lUsuarios = bd.getUsuarios();
@@ -92,6 +92,10 @@ public class Vehiculo extends Thread {
 		}
 	}
 
+	/**
+	 * Se encarga de gestionar el login en el momento de insertar el nick del usuario
+	 * @param parametro
+	 */
 	public void tratarUser(String parametro) {
 		Usuario u;
 		boolean encontrado = false;
@@ -112,9 +116,14 @@ public class Vehiculo extends Thread {
 		} catch (IOException e) {
 			System.out.println("Error al devolver USER");
 		}
-
 	}
 
+	/**
+	 * Gestiona el tratamiento de la contrasena insertada por el usuario. En caso de que esta
+	 * sea correcta, le permite el acceso al sistema. Por el contrario, si no coincidiese,
+	 * volveria al inicio
+	 * @param parametro
+	 */
 	public void tratarPass(String parametro) {
 		if (actualUser.getPassword().equals(parametro)) {
 			mensajeEnviar = "202 OK Bienvenido al sistema \n";
@@ -132,6 +141,9 @@ public class Vehiculo extends Thread {
 		}
 	}
 
+	/**
+	 * Devuelve una lista con todos los sensores disponibles del vehiculo
+	 */
 	public void tratarListSensor() {
 		String inicio = "112 OK Lista de sensores\n";
 		String fin = "212 OK Lista finalizada\n";
@@ -146,9 +158,13 @@ public class Vehiculo extends Thread {
 		} catch (IOException e) {
 			System.out.println("Error al devolver LISTSENSOR");
 		}
-
 	}
 
+	/**
+	 * Devuelve una lista con todos los detalles de las medidas tomadas por dicho sensor
+	 * seleccionado por parametro
+	 * @param parametro
+	 */
 	public void tratarHistorico(String parametro) {
 		try {
 			if (parametro.equals("")) {
@@ -186,9 +202,13 @@ public class Vehiculo extends Thread {
 		} catch (IOException e) {
 			System.out.println("Error al enviar HISTORICO");
 		}
-
 	}
 	
+	/**
+	 * Activa el estado del sensor a 'ON', en caso de que estuviese descativado, sino
+	 * devuelve un mensaje de error
+	 * @param parametro
+	 */
 	public void tratarOnSensor(String parametro) {
 		try	{
 			boolean encontrado=false;
@@ -225,9 +245,13 @@ public class Vehiculo extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	
+	/**
+	 * Desactiva el estado del sensor, en caso de que estuviese activado, sino devuelve
+	 * un mensaje de error
+	 * @param parametro
+	 */
 	public void tratarOffSensor(String parametro) {
 		try	{
 			boolean encontrado=false;
@@ -264,11 +288,14 @@ public class Vehiculo extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
+	/**
+	 * Activa el GPS del vehiculo, en caso de que estuviese desactivado, sino devuelve
+	 * un mensaje de error
+	 */
 	public void tratarONGPS(){
-		if(estado){
+		if(gps.isEstado()){
 			mensajeEnviar = "419 ERR GPS en estado ON.\n";
 			try {
 				sM.Escribir(mensajeEnviar);
@@ -276,7 +303,7 @@ public class Vehiculo extends Thread {
 				e.printStackTrace();
 			}	
 		}else{
-			estado=true;
+			gps.setEstado(true);
 			mensajeEnviar="205 OK GPS activado. \n";
 			try {
 				sM.Escribir(mensajeEnviar);
@@ -285,9 +312,14 @@ public class Vehiculo extends Thread {
 			}
 		}
 	}
+	
+	/**
+	 * Desactiva el GPS del vehiculo, en caso de que estuviese activado, sino devuelve un
+	 * mensaje de error
+	 */
 	public void tratarOFFGPS(){
-		if(estado){
-			estado=false;
+		if(gps.isEstado()){
+			gps.setEstado(false);
 			mensajeEnviar = "206 OK GPS desactivado.\n";
 			try {
 				sM.Escribir(mensajeEnviar);
@@ -303,6 +335,12 @@ public class Vehiculo extends Thread {
 			}
 		}
 	}
+	
+	/**
+	 * Permite obtener el valor actual del sensor seleccionado por parametro. En caso de que
+	 * dicho sensor estuviese desactivado, devuelve un mensaje de error.
+	 * @param parametro
+	 */
 	public void tratarGetValact(String parametro){
 		try {
 			if (parametro.equals("")) {
@@ -340,12 +378,18 @@ public class Vehiculo extends Thread {
 			System.out.println("Error al enviar HISTORICO");
 		}
 	}
+	
+	/**
+	 * Permite al usuario recibir una "foto", transmision de bytes, en caso de que el GPS
+	 * se encuentre activado. Posteriormente, debera ejecutar el comando "GET_LOC" para
+	 * que el proceso sea correcto. 
+	 */
 	public void tratarGetFoto(){
 		try {
-		if(this.estado){	
+		if(gps.isEstado()){	
 				sM.Escribir("206 OK lo que serían los bytes...\n");
 				if(sM.Leer().equals("GET_LOC")){
-					
+					tratarGetLoc();
 				}else{
 					sM.Escribir("No has enviado GET_LOC debes enviar GET_LOC\n");
 				}
@@ -355,16 +399,19 @@ public class Vehiculo extends Thread {
 		}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
+		}		
 	}
-
 	
-	
-	
-	
-	
-	
+	/**
+	 * Devuelve las coordenadas geograficas del GPS del vehiculo
+	 */
+	public void tratarGetLoc(){
+		try {	
+		sM.Escribir("114 OK "+gps.getLatitud()+"-"+gps.getLongitud()+"\n");		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
 	
 	
 	public static void main(String[] args) {

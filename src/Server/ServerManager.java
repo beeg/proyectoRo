@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import Util.SocketManager;
 
-public class ServerMananer {
+public class ServerManager {
 	public static int maxNumUsers=5;
 	public static int actualNumUser=0;
 	public static boolean terminar=false;
@@ -17,7 +17,7 @@ public class ServerMananer {
 			while (!terminar){
 				if(maxNumUsers>actualNumUser){
 					SocketManager sM = new SocketManager(ss.accept());
-					Vehiculo v=new Vehiculo(1,false,sM);
+					Vehiculo v=new Vehiculo(1,false,"4º41'24.14''","74º02'46.86''",sM);
 					actualNumUser++;
 					//Sin terminar
 				}
