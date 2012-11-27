@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import DB.GestorBD;
 import Util.SocketManager;
 
-public class Vehiculo {
+public class Vehiculo extends Thread {
 	int id;
 	boolean estado;
 	Usuario actualUser;
@@ -34,19 +34,22 @@ public class Vehiculo {
 		mensajeCliente = "";
 		mensajeEnviar = "";
 	}
-
+	public void run(){
+		activarServidor();
+	}
 	/**
 	 * Este metodo hay que ejecutarlo despues de crear el Servidor, un bucle
 	 * hasta que manden SALIR como comando!
 	 */
 	public void activarServidor() {
+		try {
 		while (!mensajeCliente.equals("SALIR")) {
-			try {
 				mensajeCliente = sM.Leer();
 				gestionarMensaje();
-			} catch (IOException e) {
-			}
-
+			} 
+			sM.Escribir("208 OK Adiós");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -80,6 +83,12 @@ public class Vehiculo {
 			tratarOFFGPS();
 		} else if(comando.equals("ONGPS")){
 			tratarONGPS();
+		} else if(comando.equals("GET_VALACT")){
+			tratarGetValact(parametro);
+		}else if(comando.equals("GET_FOTO")){
+			
+		}else if(comando.equals("GET_LOC")){
+			
 		}
 	}
 
@@ -294,6 +303,70 @@ public class Vehiculo {
 			}
 		}
 	}
+	public void tratarGetValact(String parametro){
+		try {
+			if (parametro.equals("")) {
+				mensajeEnviar = "415 ERR Falta parámetro id_sensor\n";
+				sM.Escribir(mensajeEnviar);
+			} else {
+				try {
+					int idSensor = Integer.parseInt(parametro);
+					boolean encontrado = false;
+					Sensor sensor = null;
+					System.out.println(lSensores);
+					for (int i = 0; i < lSensores.size() && !encontrado; i++) {
+						sensor = lSensores.get(i);
+						if (sensor.getId() == idSensor) {
+							encontrado = true;
+						}
+					}
+					if (encontrado) {
+						if(sensor.isEstado()){
+							//preguntar qué medida hay que mandar.
+						}else{
+							mensajeEnviar="416 Sensor en OFF\n";
+							sM.Escribir(mensajeEnviar);
+						}
+					} else {
+						mensajeEnviar = "414 ERR Sensor desconocido\n";
+						sM.Escribir(mensajeEnviar);
+					}
+				} catch (NumberFormatException e) {
+					mensajeEnviar = "414 ERR Sensor desconocido\n";
+					sM.Escribir(mensajeEnviar);
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("Error al enviar HISTORICO");
+		}
+	}
+	public void tratarGetFoto(){
+		try {
+		if(this.estado){	
+				sM.Escribir("206 OK lo que serían los bytes...\n");
+				if(sM.Leer().equals("GET_LOC")){
+					
+				}else{
+					sM.Escribir("No has enviado GET_LOC debes enviar GET_LOC\n");
+				}
+		}
+		else{
+				sM.Escribir("420 ERR GPS en estado OFF\n");
+		}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) {
 		try {
 			ServerSocket ss = new ServerSocket(5888);
