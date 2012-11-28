@@ -2,7 +2,6 @@ package Server;
 
 import java.util.ArrayList;
 
-import DB.GestorBD;
 
 public class Sensor {
 	int id;
