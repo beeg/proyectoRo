@@ -12,6 +12,7 @@ public class ServidorLocalizacion {
 	private String mensajeCliente;
 	private Usuario actualUser;
 	private ArrayList<Usuario>lUsuarios;
+	private ArrayList<Celda> lCeldas;
 	private String mensajeEnviar;
 	//private static String[]arrayComandos={"USER","PASS","GET_COOR","SALIR"};
 	public ServidorLocalizacion(SocketManager sM){
@@ -81,6 +82,39 @@ public class ServidorLocalizacion {
 			sM.Escribir(mensajeEnviar);
 		} catch (IOException e) {
 			System.out.println("Error al devolver PASS");
+		}
+	}
+	
+	public void tratarGetCoor(String parametro) {
+		try {
+		if(parametro.equals(""))	{
+			mensajeEnviar="418 ERR Falta parametro cell_id.\n";
+		}	else	{
+		try	{
+		boolean encontrado=false;
+		int idCelda=Integer.parseInt(parametro);
+		Celda celda=null;
+		
+		for(int i=0;i<lCeldas.size()&&!encontrado;i++)	{
+			if(lCeldas.get(i).getId()==idCelda)	{
+				encontrado=true;
+				celda=lCeldas.get(i);
+			}
+		}
+		
+		if(encontrado)	{
+			mensajeEnviar="114 OK "+celda.getLatitud()+"-"+celda.getLongitud()+"\n";
+		}	else	{
+			mensajeEnviar="417 ERR Celda desconocida.\n";
+		} }  catch (NumberFormatException e) {
+			mensajeEnviar = "417 ERR Celda desconocida\n";
+			sM.Escribir(mensajeEnviar);
+		}
+		}
+			sM.Escribir(mensajeEnviar);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
