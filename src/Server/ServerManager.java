@@ -17,7 +17,7 @@ public class ServerManager {
 			while (!terminar){
 				if(maxNumUsers>actualNumUser){
 					SocketManager sM = new SocketManager(ss.accept());
-					Vehiculo v=new Vehiculo(1,false,"4º41'24.14''","74º02'46.86''",sM);
+					Vehiculo v=new Vehiculo(1,new GPS(1,false,"4º41'24.14''","74º02'46.86''"),1,sM);
 					actualNumUser++;
 					//Sin terminar
 				}

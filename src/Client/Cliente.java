@@ -127,13 +127,27 @@ public class Cliente {
 			SocketManager sm = new SocketManager("127.0.0.1", 5888);
 			Cliente c = new Cliente(sm);
 			c.conectar();
+			System.out.println("ListSensor Inicio");
 			c.listSensor();
+			System.out.println("ListSensor Fin");
+			System.out.println("Historico Inicio");
 			c.historico(1);
+			System.out.println("Historico Fin");
+			System.out.println("Historico Inicio");
 			c.historico(3);
+			System.out.println("Historico Fin");
+			System.out.println("SensorOn inicio");
 			c.onSensor(2);
+			System.out.println("SensorOn fin");
+			System.out.println("SensorOff inicio");
 			c.offSensor(1);
+			System.out.println("SensorOff fin");
+			System.out.println("GPSOff inicio");
 			c.OFFGPS();
+			System.out.println("GPSOff fin");
+			System.out.println("GPSOn inicio");
 			c.ONGPS();
+			System.out.println("GPSOff inicio");
 			System.out.println("Terminado");
 		} catch (IOException e) {
 			e.printStackTrace();

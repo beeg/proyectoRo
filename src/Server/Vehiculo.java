@@ -9,6 +9,7 @@ import Util.SocketManager;
 
 public class Vehiculo extends Thread {
 	int id;
+	int idCell;
 	GPS gps;
 	Usuario actualUser;
 	SocketManager sM;
@@ -22,10 +23,11 @@ public class Vehiculo extends Thread {
 	 * @param id
 	 * @param sM
 	 */
-	public Vehiculo(int id, boolean estado, String latitud, String longitud, SocketManager sM) {
+	public Vehiculo(int id, GPS gps,int idCell, SocketManager sM) {
 		this.sM = sM;
 		this.id = id;
-		this.gps = new GPS(estado,latitud,longitud);
+		this.gps = gps;
+		this.idCell=idCell;
 		GestorBD bd = GestorBD.getInstance();
 		bd.conectar();
 		lUsuarios = bd.getUsuarios();
@@ -42,15 +44,18 @@ public class Vehiculo extends Thread {
 	 * hasta que manden SALIR como comando!
 	 */
 	public void activarServidor() {
-		try {
 		while (!mensajeCliente.equals("SALIR")) {
-				mensajeCliente = sM.Leer();
-				gestionarMensaje();
-			} 
-			sM.Escribir("208 OK Adiós");
+			try	{
+			mensajeCliente = sM.Leer();
+			gestionarMensaje();
+			}	catch(IOException e)	{}	
+		}
+		try{
+			sM.Escribir("208 OK Adiós");		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**
@@ -233,7 +238,10 @@ public class Vehiculo extends Thread {
 					sM.Escribir(mensajeEnviar);	
 				} else	{	//OFF
 					s.setEstado(true);
-					//actualizar en BD
+					GestorBD g = GestorBD.getInstance();
+					g.conectar();
+					g.setEstadoSensor(s.getId(), true);
+					g.desconectar();
 					mensajeEnviar = "203 OK Sensor activo.\n";
 					sM.Escribir(mensajeEnviar);	
 				}
@@ -304,6 +312,10 @@ public class Vehiculo extends Thread {
 			}	
 		}else{
 			gps.setEstado(true);
+			GestorBD g = GestorBD.getInstance();
+			g.conectar();
+			g.setEstadoGPS(gps.getId(), true);
+			g.desconectar();
 			mensajeEnviar="205 OK GPS activado. \n";
 			try {
 				sM.Escribir(mensajeEnviar);
@@ -321,7 +333,11 @@ public class Vehiculo extends Thread {
 		if(gps.isEstado()){
 			gps.setEstado(false);
 			mensajeEnviar = "206 OK GPS desactivado.\n";
-			try {
+			try {				
+				GestorBD g = GestorBD.getInstance();
+				g.conectar();
+				g.setEstadoGPS(gps.getId(), false);
+				g.desconectar();
 				sM.Escribir(mensajeEnviar);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -396,6 +412,7 @@ public class Vehiculo extends Thread {
 		}
 		else{
 				sM.Escribir("420 ERR GPS en estado OFF\n");
+				
 		}
 		} catch (IOException e) {
 			e.printStackTrace();

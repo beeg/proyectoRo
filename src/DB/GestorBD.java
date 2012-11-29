@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import Server.GPS;
 import Server.Medida;
 import Server.Sensor;
 import Server.Usuario;
@@ -41,7 +42,7 @@ public class GestorBD {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conexion = DriverManager.getConnection("jdbc:sqlite:db/ro.s3db");
-
+			System.out.println("Conectar");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -55,6 +56,7 @@ public class GestorBD {
 	public void desconectar() {
 		try {
 			conexion.close();
+			System.out.println("Desconectar");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -117,10 +119,11 @@ public class GestorBD {
 		}
 	}
 
-	public void insertarVehiculo(boolean gps) throws SQLException {
+	public void insertarVehiculo(int idGps, int idCelda) throws SQLException {
 		PreparedStatement smt;
-		smt = conexion.prepareStatement("insert into VEHICULO values(?)");
-		smt.setBoolean(1, gps);
+		smt = conexion.prepareStatement("insert into VEHICULO values(?,?)");
+		smt.setInt(1, idGps);
+		smt.setInt(2, idCelda);
 		smt.executeUpdate();
 	}
 
@@ -136,42 +139,15 @@ public class GestorBD {
 		smt = conexion.prepareStatement("SELECT * FROM VEHICULO where ID=?");
 		smt.setInt(1, id);
 		ResultSet rs = smt.executeQuery();
-		return new Vehiculo(id, rs.getBoolean(2),rs.getString(3),rs.getString(4),sm);
-	}
-	
-	public void setLatitudVehiculo(int id, String lat) {
-		PreparedStatement smt;
-		try {
-			smt = conexion
-					.prepareStatement("UPDATE VEHICULO SET LATITUD=? WHERE ID=?");
-			smt.setString(1, lat);
-			smt.setInt(2, id);
-			smt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void setLongitudVehiculo(int id, String longitud) {
-		PreparedStatement smt;
-		try {
-			smt = conexion
-					.prepareStatement("UPDATE VEHICULO SET LONGITUD=? WHERE ID=?");
-			smt.setString(1, longitud);
-			smt.setInt(2, id);
-			smt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return new Vehiculo(id, getGPS(rs.getInt(2)),rs.getInt(3),sm);
 	}
 
-	public void insertarSensor(String desc, boolean gps) throws SQLException {
+	public void insertarSensor(String desc, boolean estado, int idVehiculo) throws SQLException {
 		PreparedStatement smt;
-		smt = conexion.prepareStatement("insert into SENSOR values(?,?)");
+		smt = conexion.prepareStatement("insert into SENSOR values(?,?,?)");
 		smt.setString(1, desc);
-		smt.setBoolean(2, gps);
+		smt.setBoolean(2, estado);
+		smt.setInt(3, idVehiculo);
 		smt.executeUpdate();
 	}
 
@@ -222,8 +198,8 @@ public class GestorBD {
 			while (rs.next()) {
 				int id = rs.getInt("ID");
 				Date fecha = rs.getDate("FECHA");
-				String longitud = rs.getString("LONG");
-				String lat = rs.getString("LAT");
+				String longitud = rs.getString("LONGITUD");
+				String lat = rs.getString("LATITUD");
 				int valor = rs.getInt("VALOR");
 				lMedidas.add(new Medida(id, fecha, lat, longitud, valor));
 			}
@@ -239,6 +215,28 @@ public class GestorBD {
 		try {
 			smt = conexion
 					.prepareStatement("UPDATE SENSOR SET ESTADO=? WHERE ID=?");
+			smt.setBoolean(1, est);
+			smt.setInt(2, id);
+			smt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public GPS getGPS(int id) throws SQLException {
+		PreparedStatement smt;
+		smt = conexion.prepareStatement("SELECT * FROM GPS where ID=?");
+		smt.setInt(1, id);
+		ResultSet rs = smt.executeQuery();
+		return new GPS(id, rs.getBoolean(4), rs.getString(2), rs.getString(3));
+	}
+	
+	public void setEstadoGPS(int id, boolean est) {
+		PreparedStatement smt;
+		try {
+			smt = conexion
+					.prepareStatement("UPDATE GPS SET ESTADO=? WHERE ID=?");
 			smt.setBoolean(1, est);
 			smt.setInt(2, id);
 			smt.executeUpdate();
