@@ -64,7 +64,6 @@ public class Vehiculo extends Thread {
 	 * del comando llamo a su metodo
 	 */
 	public void gestionarMensaje() {
-
 		String[] separado = mensajeCliente.split(" ");
 		String comando = separado[0];
 		String parametro;

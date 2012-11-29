@@ -35,7 +35,26 @@ public class Cliente {
 			e.printStackTrace();
 		}
 	}
-
+	public String userLogin(String user){
+		try {
+			System.out.println(user);
+			sm.Escribir("USER " + user + '\n');
+			mensajeServer = sm.Leer();
+			System.out.println(mensajeServer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return mensajeServer;
+	}
+	public String passLogin(String pass){
+		try{
+		sm.Escribir("PASS " + pass + '\n');
+		mensajeServer = sm.Leer();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		return mensajeServer;
+	}
 	/**
 	 * Metodo para mandar el comando LISTSENSOR
 	 */
@@ -122,11 +141,20 @@ public class Cliente {
 			e.printStackTrace();
 		}
 	}
+	public void SALIR(){
+		try{
+		sm.Escribir("SALIR \n");
+		sm.CerrarStreams();
+		sm.CerrarSocket();
+		}catch(IOException e){
+			
+		}
+	}
 	public static void main(String[] args) {
 		try {
 			SocketManager sm = new SocketManager("127.0.0.1", 5888);
 			Cliente c = new Cliente(sm);
-			c.conectar();
+			/*c.conectar();
 			System.out.println("ListSensor Inicio");
 			c.listSensor();
 			System.out.println("ListSensor Fin");
@@ -148,6 +176,8 @@ public class Cliente {
 			System.out.println("GPSOn inicio");
 			c.ONGPS();
 			System.out.println("GPSOff inicio");
+			*/
+			c.userLogin("hola");
 			System.out.println("Terminado");
 		} catch (IOException e) {
 			e.printStackTrace();
