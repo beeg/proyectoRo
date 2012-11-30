@@ -134,12 +134,12 @@ public class GestorBD {
 		smt.executeUpdate();
 	}
 
-	public Vehiculo getVehiculo(int id, SocketManager sm) throws SQLException {
+	public Vehiculo getVehiculo(int id) throws SQLException {
 		PreparedStatement smt;
 		smt = conexion.prepareStatement("SELECT * FROM VEHICULO where ID=?");
 		smt.setInt(1, id);
 		ResultSet rs = smt.executeQuery();
-		return new Vehiculo(id, getGPS(rs.getInt(2)),rs.getInt(3),sm);
+		return new Vehiculo(id, getGPS(rs.getInt(2)),rs.getInt(3),5888);
 	}
 
 	public void insertarSensor(String desc, boolean estado, int idVehiculo) throws SQLException {
