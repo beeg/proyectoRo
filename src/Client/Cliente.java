@@ -144,8 +144,11 @@ public class Cliente {
 	public void SALIR(){
 		try{
 		sm.Escribir("SALIR \n");
-		sm.CerrarStreams();
-		sm.CerrarSocket();
+		mensajeServer=sm.Leer();
+		if(mensajeServer.contains("208")){
+			sm.CerrarStreams();
+			sm.CerrarSocket();
+		}
 		}catch(IOException e){
 			
 		}

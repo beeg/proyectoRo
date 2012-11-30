@@ -44,14 +44,16 @@ public class Vehiculo extends Thread {
 	 * hasta que manden SALIR como comando!
 	 */
 	public void activarServidor() {
-		while (!mensajeCliente.equals("SALIR")) {
+		while (!mensajeCliente.contains("SALIR")) {
 			try	{
 			mensajeCliente = sM.Leer();
+			System.out.println(mensajeCliente);
 			gestionarMensaje();
-			}	catch(IOException e)	{}	
+			}	catch(IOException e)	{System.out.println("de catcheo");}	
 		}
 		try{
-			sM.Escribir("208 OK Adiós");		
+			System.out.println("paso por adiossssss");
+			sM.Escribir("208 OK Adiós\n");		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -65,6 +67,7 @@ public class Vehiculo extends Thread {
 	 */
 	public void gestionarMensaje() {
 		String[] separado = mensajeCliente.split(" ");
+		System.out.println(mensajeCliente);
 		String comando = separado[0];
 		String parametro;
 		if (separado.length != 2)
@@ -94,6 +97,7 @@ public class Vehiculo extends Thread {
 		}else if(comando.equals("GET_LOC")){
 			
 		}
+		System.out.println("Termino gestionarMensaje");
 	}
 
 	/**
@@ -433,6 +437,7 @@ public class Vehiculo extends Thread {
 	public static void main(String[] args) {
 		try {
 			ServerSocket ss = new ServerSocket(5888);
+			while(true){
 			SocketManager sM = new SocketManager(ss.accept());
 			GestorBD gestor=GestorBD.getInstance();
 			gestor.conectar();
@@ -440,6 +445,7 @@ public class Vehiculo extends Thread {
 			gestor.desconectar();
 			System.out.println("Servidor activo");
 			s.activarServidor();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e1) {

@@ -41,6 +41,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 	private JLabel mensajes;
 	private Color green;
 	private Color red;
+	Cliente c;
 	SocketManager sm;
 
 	/**
@@ -115,6 +116,9 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		// Para cuando le da a la x se comporte como si fuese el boton cancelar
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				if(c!=null){
+					c.SALIR();
+				}
 				dispose();
 			}
 		});
@@ -129,9 +133,11 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		if (o == bLogin) {
 			String mensaje;
 			try{
-			sm = new SocketManager(ip.getText(), 5888);
-			Cliente c=new Cliente(sm);
-			mensaje=c.userLogin(this.nick.getText());
+				if(c==null){
+					sm = new SocketManager(ip.getText(), 5888);
+					c=new Cliente(sm);
+				}
+				mensaje=c.userLogin(this.nick.getText());
 			if(mensaje.contains("201")){
 				mensajes.setBackground(green);
 				mensajes.setText(mensaje);
@@ -151,6 +157,9 @@ public class VentanaLogin extends JFrame implements ActionListener {
 			}
 		} else {
 			if (o == bCancelar) {
+				if(c!=null){
+					c.SALIR();
+				}
 				this.dispose();
 			}
 		}
