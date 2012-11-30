@@ -5,10 +5,10 @@ import java.io.IOException;
 import Util.SocketManager;
 
 public class Cliente {
-	SocketManager sm;
-	String mensajeServer;
-	String login;
-	String pass;
+	private SocketManager sm;
+	private String mensajeServer;
+	private String login;
+	private String pass;
 
 	public Cliente(SocketManager sm) {
 		this.sm = sm;

@@ -7,7 +7,7 @@ public class Medida {
 	private Date date;
 	private String latitud;
 	private String longitud;
-	int valor;
+	private int valor;
 
 	public Medida(int id, Date date, String latitud, String longitud, int valor) {
 		super();

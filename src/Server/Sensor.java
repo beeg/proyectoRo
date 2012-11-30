@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 
 public class Sensor {
-	int id;
-	String desc;
-	boolean estado;
-	ArrayList<Medida> medidas;
+	private int id;
+	private String desc;
+	private boolean estado;
+	private ArrayList<Medida> medidas;
 
 	public Sensor(int id, String desc, boolean estado, ArrayList<Medida> medidas) {
 		super();

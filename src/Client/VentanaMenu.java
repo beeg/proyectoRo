@@ -17,9 +17,9 @@ public class VentanaMenu extends JFrame implements ActionListener{
 	private javax.swing.JButton bGetValAct;
 	private javax.swing.JButton bGetFoto;
 	private javax.swing.JButton bSalir;
-	
-	public VentanaMenu()	{
-		
+	private Cliente c;
+	public VentanaMenu(Cliente c)	{
+		this.c=c;
 		//Inicializacion componentes
         pFondo = new javax.swing.JPanel();
         lOpciones = new javax.swing.JLabel();
@@ -122,8 +122,8 @@ public class VentanaMenu extends JFrame implements ActionListener{
 	}
 	
 	public static void main (String[] args)	{
-		VentanaMenu v = new VentanaMenu();
-		v.setVisible(true);
+		//VentanaMenu v = new VentanaMenu();
+		//v.setVisible(true);
 	}
 
 }

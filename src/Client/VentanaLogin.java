@@ -41,8 +41,8 @@ public class VentanaLogin extends JFrame implements ActionListener {
 	private JLabel mensajes;
 	private Color green;
 	private Color red;
-	Cliente c;
-	SocketManager sm;
+	private Cliente c;
+	private SocketManager sm;
 
 	/**
 	 * @param pvL
@@ -143,7 +143,9 @@ public class VentanaLogin extends JFrame implements ActionListener {
 				mensajes.setText(mensaje);
 				mensaje=c.passLogin(this.password.getText());
 				if(mensaje.contains("202")){
-					//Contraseña correcta
+					VentanaMenu vm=new VentanaMenu(c);
+					vm.setVisible(true);
+					this.dispose();
 				}else{
 					JOptionPane.showMessageDialog(this,mensaje, "Error al logear",JOptionPane.ERROR_MESSAGE);
 				}

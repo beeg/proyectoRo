@@ -9,16 +9,16 @@ import DB.GestorBD;
 import Util.SocketManager;
 
 public class Vehiculo {
-	int id;
-	int idCell;
-	GPS gps;
-	ServerSocket ss;
-	ArrayList<Usuario> lUsuarios;
-	ArrayList<Sensor> lSensores;
-	ArrayList<Sesion>lSesiones;
-	int numMaxUsuarios;
-	int numActualUsuarios;
-	boolean terminar;
+	private int id;
+	private int idCell;
+	private GPS gps;
+	private ServerSocket ss;
+	private ArrayList<Usuario> lUsuarios;
+	private ArrayList<Sensor> lSensores;
+	private ArrayList<Sesion>lSesiones;
+	private int numMaxUsuarios;
+	private int numActualUsuarios;
+	private boolean terminar;
 	
 	/**
 	 * Es el servidor/vehiculo con su id y su SocketManager

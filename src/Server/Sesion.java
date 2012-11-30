@@ -8,15 +8,15 @@ import Util.SocketManager;
 import DB.GestorBD;
 
 public class Sesion implements Runnable{
-	SocketManager sM;
-	String mensajeCliente;
-	String mensajeEnviar;
-	Usuario actualUser;
-	Vehiculo v;
-	int estado;
-	ArrayList<Usuario>lUsuarios;
-	ArrayList<Sensor>lSensores;
-	boolean terminar;
+	private SocketManager sM;
+	private String mensajeCliente;
+	private String mensajeEnviar;
+	private Usuario actualUser;
+	private Vehiculo v;
+	private int estado;
+	private ArrayList<Usuario>lUsuarios;
+	private ArrayList<Sensor>lSensores;
+	private boolean terminar;
 	public Sesion(SocketManager sM, Vehiculo v){
 		mensajeCliente="";
 		mensajeEnviar="";
@@ -227,7 +227,7 @@ public class Sesion implements Runnable{
 				int idSensor=Integer.parseInt(parametro);
 			
 				for(int i=0; i<lSensores.size() && !encontrado; i++)	{
-					if(lSensores.get(i).id==idSensor)	{
+					if(lSensores.get(i).getId()==idSensor)	{
 						encontrado=true;
 						s=lSensores.get(i);
 					}
@@ -273,7 +273,7 @@ public class Sesion implements Runnable{
 				int idSensor=Integer.parseInt(parametro);
 			
 				for(int i=0; i<lSensores.size() && !encontrado; i++)	{
-					if(lSensores.get(i).id==idSensor)	{
+					if(lSensores.get(i).getId()==idSensor)	{
 						encontrado=true;
 						s=lSensores.get(i);
 					}
