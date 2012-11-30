@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import Util.SocketManager;
 
@@ -14,27 +15,6 @@ public class Cliente {
 		this.sm = sm;
 	}
 
-	/**
-	 * El metodo de logeo pasas login y pass
-	 */
-	public void conectar() {
-		login = "admin";
-		pass = "admin";
-		try {
-			sm.Escribir("USER " + login + '\n');
-			mensajeServer = sm.Leer();
-			System.out.println(mensajeServer);
-			if (mensajeServer.equals("201 OK Bienvenido " + login + ".")) {
-				sm.Escribir("PASS " + pass + '\n');
-				mensajeServer = sm.Leer();
-				System.out.println(mensajeServer);
-			} else {
-				System.out.println(mensajeServer);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	public String userLogin(String user){
 		try {
 			System.out.println(user);
@@ -58,19 +38,20 @@ public class Cliente {
 	/**
 	 * Metodo para mandar el comando LISTSENSOR
 	 */
-	public void listSensor() {
+	public ArrayList<String> listSensor() {
+		ArrayList<String>listaMensajes=new ArrayList<String>();
 		try {
 			sm.Escribir("LISTSENSOR" + '\n');
 			String mensajeLeido = sm.Leer();
+			listaMensajes.add(mensajeLeido);
 			while (!mensajeLeido.contains("212")) {
-				System.out.println(mensajeLeido);
 				mensajeLeido = sm.Leer();
+				listaMensajes.add(mensajeLeido);
 			}
-			System.out.println(mensajeLeido);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return listaMensajes;
 	}
 
 	/**

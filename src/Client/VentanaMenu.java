@@ -2,6 +2,9 @@ package Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -18,7 +21,7 @@ public class VentanaMenu extends JFrame implements ActionListener{
 	private javax.swing.JButton bGetFoto;
 	private javax.swing.JButton bSalir;
 	private Cliente c;
-	public VentanaMenu(Cliente c)	{
+	public VentanaMenu(final Cliente c)	{
 		this.c=c;
 		//Inicializacion componentes
         pFondo = new javax.swing.JPanel();
@@ -112,13 +115,40 @@ public class VentanaMenu extends JFrame implements ActionListener{
         bGetFoto.addActionListener(this);
         bSalir.addActionListener(this);
         
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		// Para cuando le da a la x se comporte como si fuese el boton cancelar
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				if(c!=null){
+					c.SALIR();
+				}
+				dispose();
+			}
+		});
 
         pack();
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		
+	public void actionPerformed(ActionEvent a) {
+		Object o = a.getSource();
+		if(o==bListSensor){
+			ArrayList<String>sensores=c.listSensor();
+			for(int i=0;i<sensores.size();i++){
+				System.out.println(sensores.get(i));
+			}
+		}else if(o==bHistorico){
+			
+		}else if(o==bOnSensor){
+			
+		}else if(o==bOffSensor){
+			
+		}else if(o==bGetValAct){
+			
+		}else if(o==bGetFoto){
+			
+		}else if(o==bSalir){
+			c.SALIR();
+			this.dispose();
+		}
 	}
 	
 	public static void main (String[] args)	{

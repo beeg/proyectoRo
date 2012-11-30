@@ -35,7 +35,6 @@ public class Sesion implements Runnable{
 		while (!mensajeCliente.contains("SALIR")||terminar) {
 			try	{
 			mensajeCliente = sM.Leer();
-			System.out.println(mensajeCliente);
 			gestionarMensaje();
 			}	catch(IOException e)	{}	
 		}
@@ -137,6 +136,7 @@ public class Sesion implements Runnable{
 	public void tratarPass(String parametro) {
 		if (actualUser.getPassword().equals(parametro)) {
 			mensajeEnviar = "202 OK Bienvenido al sistema \n";
+			estado=2;
 		} else if (parametro.equals("")) {
 			mensajeEnviar = "403 ERR Falta la clave \n";
 			actualUser = null;
@@ -409,11 +409,7 @@ public class Sesion implements Runnable{
 		try {
 		if(v.getGps().isEstado()){	
 				sM.Escribir("206 OK lo que serían los bytes...\n");
-				if(sM.Leer().equals("GET_LOC")){
-					tratarGetLoc();
-				}else{
-					sM.Escribir("No has enviado GET_LOC debes enviar GET_LOC\n");
-				}
+				estado=3;
 		}
 		else{
 				sM.Escribir("420 ERR GPS en estado OFF\n");
@@ -432,7 +428,8 @@ public class Sesion implements Runnable{
 		sM.Escribir("114 OK "+v.getGps().getLatitud()+"-"+v.getGps().getLongitud()+"\n");		
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
+		estado=2;
 
 	}
 	public SocketManager getsM() {
