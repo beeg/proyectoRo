@@ -15,21 +15,24 @@ public class VentanaSelectSensor extends JFrame implements ActionListener {
 	private javax.swing.JComboBox<String> cbSensor;
 	private javax.swing.JButton bAceptar;
 	private javax.swing.JButton bCancelar;
-	private ArrayList<Sensor> lSensores;
+	private javax.swing.JLabel lMensaje;
+	private ArrayList<String> lSensores;
 	
-	public VentanaSelectSensor(ArrayList<Sensor> lSensores)	{
+	public VentanaSelectSensor(ArrayList<String> lSensores)	{
 		jPanel1 = new javax.swing.JPanel();
         lSensor = new javax.swing.JLabel();
         cbSensor = new javax.swing.JComboBox<String>();
         bAceptar = new javax.swing.JButton();
         bCancelar = new javax.swing.JButton();
+        lMensaje = new javax.swing.JLabel();
         this.lSensores=lSensores;
-        cbSensor.setModel(new javax.swing.DefaultComboBoxModel<String>(listaSensores(lSensores)));
+        cbSensor.setModel(new javax.swing.DefaultComboBoxModel<String>((listaSensores(lSensores))));
 
         lSensor.setText("Selecciona el sensor:");
         bAceptar.setText("Aceptar");
         bCancelar.setText("Cancelar");
-        
+        lMensaje.setText("");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -66,6 +69,7 @@ public class VentanaSelectSensor extends JFrame implements ActionListener {
                         .addGap(18, 18, 18)
                         .addComponent(bCancelar)))
                 .addGap(0, 7, Short.MAX_VALUE))
+            .addComponent(lMensaje, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -75,7 +79,8 @@ public class VentanaSelectSensor extends JFrame implements ActionListener {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bAceptar)
                     .addComponent(bCancelar))
-                .addGap(0, 45, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(lMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -94,20 +99,19 @@ public class VentanaSelectSensor extends JFrame implements ActionListener {
 		
 	}
 	
-	public String[] listaSensores(ArrayList<Sensor> l)	{
+	public String[] listaSensores(ArrayList<String> l)	{
 		String[] sensores = new String[l.size()];
 		for(int i=0;i<l.size();i++)	{
-			Integer aux =(Integer)l.get(i).getId();
-			sensores[i]=aux.toString();
+			sensores[i]=l.get(i);
 		}
 		return sensores;
 	}
 	
-	public static void main(String[] args)	{
+	/*public static void main(String[] args)	{
 		ArrayList<Sensor> listaS = new ArrayList<Sensor>();
 		listaS.add(new Sensor(4,"prueba",true, new ArrayList<Medida>()));
 		VentanaSelectSensor v = new VentanaSelectSensor(listaS);
 		v.setVisible(true);
-	}
+	}*/
 
 }

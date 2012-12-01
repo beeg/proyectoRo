@@ -133,7 +133,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		if (o == bLogin) {
 			String mensaje;
 			try{
-				if(c==null){
+				if(c==null)	{
 					sm = new SocketManager(ip.getText(), 5888);
 					c=new Cliente(sm);
 				}

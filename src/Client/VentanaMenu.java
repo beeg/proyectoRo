@@ -20,7 +20,9 @@ public class VentanaMenu extends JFrame implements ActionListener{
 	private javax.swing.JButton bGetValAct;
 	private javax.swing.JButton bGetFoto;
 	private javax.swing.JButton bSalir;
+	private javax.swing.JLabel lMensaje;
 	private Cliente c;
+	
 	public VentanaMenu(final Cliente c)	{
 		this.c=c;
 		//Inicializacion componentes
@@ -33,6 +35,7 @@ public class VentanaMenu extends JFrame implements ActionListener{
         bGetValAct = new javax.swing.JButton();
         bGetFoto = new javax.swing.JButton();
         bSalir = new javax.swing.JButton();
+        lMensaje = new javax.swing.JLabel();
 
         lOpciones.setText("Selecciona una de las siguientes opciones:");
         bListSensor.setText("Listado de sensores");
@@ -42,11 +45,16 @@ public class VentanaMenu extends JFrame implements ActionListener{
         bGetValAct.setText("Valores Actuales");
         bGetFoto.setText("Foto");
         bSalir.setText("Salir");
-
+        lMensaje.setText("");
+       
         javax.swing.GroupLayout pFondoLayout = new javax.swing.GroupLayout(pFondo);
         pFondo.setLayout(pFondoLayout);
         pFondoLayout.setHorizontalGroup(
             pFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFondoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bSalir)
+                .addContainerGap())
             .addGroup(pFondoLayout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addGroup(pFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -58,22 +66,18 @@ public class VentanaMenu extends JFrame implements ActionListener{
                                 .addGap(21, 21, 21)
                                 .addComponent(bOnSensor)))
                         .addGroup(pFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pFondoLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pFondoLayout.createSequentialGroup()
                                 .addGap(41, 41, 41)
                                 .addComponent(bHistorico)
                                 .addGap(51, 51, 51)
-                                .addComponent(bGetValAct)
-                                .addContainerGap(76, Short.MAX_VALUE))
-                            .addGroup(pFondoLayout.createSequentialGroup()
+                                .addComponent(bGetValAct))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pFondoLayout.createSequentialGroup()
                                 .addGap(49, 49, 49)
                                 .addComponent(bGetFoto)
                                 .addGap(73, 73, 73)
-                                .addComponent(bOffSensor)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFondoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bSalir)
-                .addContainerGap())
+                                .addComponent(bOffSensor)))))
+                .addContainerGap(76, Short.MAX_VALUE))
+            .addComponent(lMensaje, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pFondoLayout.setVerticalGroup(
             pFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,7 +96,8 @@ public class VentanaMenu extends JFrame implements ActionListener{
                     .addComponent(bOnSensor)
                     .addComponent(bOffSensor)
                     .addComponent(bGetFoto))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(lMensaje))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -105,7 +110,7 @@ public class VentanaMenu extends JFrame implements ActionListener{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pFondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-    
+        
         //Listeners
         bListSensor.addActionListener(this);
         bHistorico.addActionListener(this);
@@ -132,9 +137,11 @@ public class VentanaMenu extends JFrame implements ActionListener{
 		Object o = a.getSource();
 		if(o==bListSensor){
 			ArrayList<String>sensores=c.listSensor();
-			for(int i=0;i<sensores.size();i++){
+			for(int i=0;i<sensores.size();i++){				
 				System.out.println(sensores.get(i));
 			}
+			VentanaListSensor v = new VentanaListSensor(sensores);
+			v.setVisible(true);
 		}else if(o==bHistorico){
 			
 		}else if(o==bOnSensor){

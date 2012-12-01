@@ -58,23 +58,28 @@ public class Cliente {
 	 * Metodo para recuperar todas las medidas de un sensor. HISTORIDO id_sensor
 	 * @param idSensor
 	 */
-	public void historico(int idSensor) {
+	public ArrayList<String> historico(int idSensor) {
+		ArrayList<String> medidas = new ArrayList<String>();
 		try {
 			sm.Escribir("HISTORICO " + idSensor + '\n');
 			String primerMensaje = sm.Leer();
 			System.out.println(primerMensaje);
 			if (primerMensaje.contains("113")) {
-				String mensajeLeido = sm.Leer();
+				medidas.add(primerMensaje);
+				String mensajeLeido = sm.Leer();				
 				while (!mensajeLeido.contains("212")) {
+					medidas.add(mensajeLeido);
 					System.out.println(mensajeLeido);
 					mensajeLeido = sm.Leer();
 				}
 				System.out.println(mensajeLeido);
+				medidas.add(mensajeLeido);
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return medidas;
 	}
 	
 	/**
