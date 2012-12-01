@@ -25,20 +25,21 @@ public class Sesion implements Runnable{
 		lUsuarios=v.getlUsuarios();
 		lSensores=v.getlSensores();
 		estado=0;
-		actualUser=new Usuario("","");
+		actualUser=new Usuario("Desconocido","");
 		terminar=false;
 	}
 	public void run(){
 		iniciarSesion();
 	}
 	public void iniciarSesion() {
-		while (!mensajeCliente.contains("SALIR")||terminar) {
+		while (!mensajeCliente.contains("SALIR")&&!terminar) {
 			try	{
 			mensajeCliente = sM.Leer();
 			gestionarMensaje();
 			}	catch(IOException e)	{}	
 		}
 		try{
+			if(!terminar)
 			sM.Escribir("208 OK Adiós\n");	
 			System.out.println("termina la sesion");
 		} catch (IOException e) {
@@ -136,6 +137,7 @@ public class Sesion implements Runnable{
 	public void tratarPass(String parametro) {
 		if (actualUser.getPassword().equals(parametro)) {
 			mensajeEnviar = "202 OK Bienvenido al sistema \n";
+			v.cargarUsuariosVentana();
 			estado=2;
 		} else if (parametro.equals("")) {
 			mensajeEnviar = "403 ERR Falta la clave \n";
@@ -431,6 +433,10 @@ public class Sesion implements Runnable{
 		}
 		estado=2;
 
+	}
+	public void terminarSesion(){
+		v.setNumActualUsuarios(v.getNumActualUsuarios()-1);
+		terminar=true;
 	}
 	public SocketManager getsM() {
 		return sM;
