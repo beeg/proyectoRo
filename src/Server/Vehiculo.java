@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
 import DB.GestorBD;
 import Util.SocketManager;
 
@@ -19,6 +21,7 @@ public class Vehiculo {
 	private int numMaxUsuarios;
 	private int numActualUsuarios;
 	private boolean terminar;
+	private VentanaAdministrador vAdmin;
 	
 	/**
 	 * Es el servidor/vehiculo con su id y su SocketManager
@@ -52,9 +55,13 @@ public class Vehiculo {
 				Sesion s=new Sesion(sM,this);
 				lSesiones.add(s);
 				new Thread(s).start();
+				cargarUsuariosVentana();
 			}
 		}
 		System.out.println("Termino servidor");
+	}
+	public void cargarUsuariosVentana(){
+		vAdmin.cargarUsuarios();
 	}
 	public int getId() {
 		return id;
@@ -110,13 +117,26 @@ public class Vehiculo {
 	public void setNumActualUsuarios(int numActualUsuarios) {
 		this.numActualUsuarios = numActualUsuarios;
 	}
-
+	public boolean isTerminar() {
+		return terminar;
+	}
+	public void setTerminar(boolean terminar) {
+		this.terminar = terminar;
+	}
+	public VentanaAdministrador getvAdmin() {
+		return vAdmin;
+	}
+	public void setvAdmin(VentanaAdministrador vAdmin) {
+		this.vAdmin = vAdmin;
+	}
 	public static void main(String[] args) {
 			try {
 				GestorBD gestor=GestorBD.getInstance();
 				gestor.conectar();
 				Vehiculo v =gestor.getVehiculo(1);
 				gestor.desconectar();
+				VentanaAdministrador vA=new VentanaAdministrador(v);
+				v.setvAdmin(vA);
 				try {
 					v.activarServidor();
 				} catch (IOException e) {
