@@ -436,7 +436,6 @@ public class Sesion implements Runnable{
 
 	}
 	public void terminarSesion(){
-		v.setNumActualUsuarios(v.getNumActualUsuarios()-1);
 		terminar=true;
 	}
 	public SocketManager getsM() {
