@@ -51,7 +51,7 @@ public class Vehiculo {
 			if(numMaxUsuarios>numActualUsuarios){
 				SocketManager sM = new SocketManager(ss.accept());
 				Sesion s=new Sesion(sM,this);
-				numActualUsuarios++;
+				sumarUsuariosConectados();
 				lSesiones.add(s);
 				new Thread(s).start();
 				cargarUsuariosVentana();
@@ -74,6 +74,10 @@ public class Vehiculo {
 	}
 	public void cargarUsuariosVentana(){
 		vAdmin.cargarUsuarios();
+	}
+	public void sumarUsuariosConectados(){
+		numActualUsuarios++;
+		vAdmin.actualizarNumAct(numActualUsuarios);
 	}
 	public int getId() {
 		return id;
@@ -128,6 +132,8 @@ public class Vehiculo {
 	}
 	public void setNumActualUsuarios(int numActualUsuarios) {
 		this.numActualUsuarios = numActualUsuarios;
+		vAdmin.actualizarNumAct(numActualUsuarios);
+		vAdmin.cargarUsuarios();
 	}
 	public boolean isTerminar() {
 		return terminar;

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -43,6 +44,9 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 	private JTextField nombreU;
 	private JTextField contraseña;
 	private JTextField nombreTipoUsuario;
+	private JButton bCambiarLim;
+	private JTextField numUsuariosMax;
+	private JLabel numUsuariosActuales;
 	private Vehiculo v;
 	private ArrayList<Usuario>arrayUsuarios;
 	
@@ -67,6 +71,12 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		cbUsuarios.addActionListener(this);
 		bDesconectar=new JButton("Desconectar");
 		bDesconectar.addActionListener(this);
+		bCambiarLim=new JButton("Cambiar límite");
+		bCambiarLim.addActionListener(this);
+		numUsuariosActuales=new JLabel(v.getNumActualUsuarios()+"");
+		numUsuariosMax=new JTextField(15);
+		numUsuariosMax.setText(v.getNumMaxUsuarios()+"");
+		
 		//Creación de la botonera
 		Container cBotonera=new JPanel();
 		cBotonera.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -74,6 +84,7 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		cBotonera.add(bBorrarUsuario);
 		cBotonera.add(bModificarUsuario);
 		cBotonera.add(bDesconectar);
+		cBotonera.add(cbUsuarios);
 
 		
 		//Creacion del panel con la lista de usuarios
@@ -100,20 +111,39 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		  panelDatos.add(passU,gc);
 		  gc.gridx=2;
 		  panelDatos.add(contraseña,gc);
-
-
 		
-		//Creacion panel con el JComboBox con todos los usuarios del sistema
-		Container cTipoUsuario=new JPanel();
-		cTipoUsuario.setLayout(new FlowLayout(FlowLayout.CENTER));
-		cTipoUsuario.add(cbUsuarios);
-		
+		JLabel limUsu=new JLabel("Limite de usuarios: ");
+		JLabel usuAct=new JLabel("Usuarios actuales: ");
+		Container cLimiteUsuarios=new JPanel();
+		cLimiteUsuarios.setLayout( new GridBagLayout() );
+		gc = new GridBagConstraints();
+	      gc.insets = new Insets(10, 10, 10, 10);
+	      gc.gridx = 1;
+	      gc.gridy = 1;
+	      cLimiteUsuarios.add(limUsu,gc);
+		  gc.gridx=2;
+		  cLimiteUsuarios.add(numUsuariosMax,gc);
+		  gc.gridx=1;
+		  gc.gridy=2;
+		  cLimiteUsuarios.add(usuAct,gc);
+		  gc.gridx=2;
+		  cLimiteUsuarios.add(numUsuariosActuales,gc);
+		  gc.gridx=1;
+		  gc.gridy=3;
+		  cLimiteUsuarios.add(bCambiarLim,gc);
+		  
+			//Creacion panel con el JComboBox con todos los usuarios del sistema
+			Container cTipoUsuario=new JPanel();
+			cTipoUsuario.setLayout(new BoxLayout(cTipoUsuario,BoxLayout.X_AXIS));
+			cTipoUsuario.add(panelDatos);
+			cTipoUsuario.add(cLimiteUsuarios);
+
 		Container secundaria=new JPanel();
 		secundaria.setLayout(new BorderLayout());
 		secundaria.add(cBotonera,"North");
 		secundaria.add(cListaUsuarios,"West");
-		secundaria.add(cTipoUsuario,"East");
-		secundaria.add(panelDatos,"Center");
+		//secundaria.add(cTipoUsuario,"East");
+		secundaria.add(cTipoUsuario,"Center");
 		
 		Container principal=new JPanel();
 		principal.setLayout(new GridBagLayout());
@@ -124,7 +154,7 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		//Título, posición, tamaño	
 		this.setTitle("Ventana del servidor numero: "+v.getId());
 		this.setVisible(true);
-		this.setBounds(419,100,700,400);
+		this.setBounds(419,100,900,400);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				v.setTerminar(true);
@@ -145,6 +175,9 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		}			
 		this.listaUsuariosON.setModel(lm);
 		System.out.println("pasandele por aquile");
+	}
+	public void actualizarNumAct(int num){
+		numUsuariosActuales.setText(num+"");
 	}
 	
 	public void actionPerformed(ActionEvent a) {
@@ -204,6 +237,14 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 			contraseña.setText("");
 			terminarSesion(selected.getLogin());
 			actualizarCb();
+		}else if(o==bCambiarLim){
+			try{
+				int nuevoLimite=Integer.parseInt(numUsuariosMax.getText());
+				v.setNumMaxUsuarios(nuevoLimite);
+			}catch(NumberFormatException e){
+				numUsuariosMax.setText(v.getNumMaxUsuarios()+"");
+				JOptionPane.showMessageDialog(this,"El valor insertado no es un número", "Error al parsear",JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	
