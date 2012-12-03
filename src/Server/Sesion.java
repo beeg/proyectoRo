@@ -41,6 +41,7 @@ public class Sesion implements Runnable{
 		try{
 			if(!terminar)
 			sM.Escribir("208 OK Adiós\n");	
+			v.setNumActualUsuarios(v.getNumActualUsuarios()-1);
 			System.out.println("termina la sesion");
 		} catch (IOException e) {
 			e.printStackTrace();

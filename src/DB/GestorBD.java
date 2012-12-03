@@ -70,11 +70,15 @@ public class GestorBD {
 		smt.executeUpdate();
 	}
 
-	public void borrarUsuario(String login) throws SQLException {
+	public void borrarUsuario(String login) {
+		try{
 		PreparedStatement smt;
 		smt = conexion.prepareStatement("DELETE FROM USUARIO WHERE LOGIN=?");
 		smt.setString(1, login);
 		smt.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 
 	public Usuario getUsuario(String login) throws SQLException {
@@ -105,19 +109,24 @@ public class GestorBD {
 		return listaUsuarios;
 	}
 
-	public void setPassword(String login, String password) {
+	public void modificarUsuario(String loginViejo,String loginNuevo, String password) throws SQLException {
 		PreparedStatement smt;
-		try {
+			smt = conexion
+					.prepareStatement("UPDATE USUARIO SET PASSWORD=?,LOGIN=? WHERE LOGIN=?");
+			smt.setString(1, password);
+			smt.setString(2, loginNuevo);
+			smt.setString(3, loginViejo);
+			smt.executeUpdate();
+	}
+	public void setPassword(String login,String password) throws SQLException {
+		PreparedStatement smt;
 			smt = conexion
 					.prepareStatement("UPDATE USUARIO SET PASSWORD=? WHERE LOGIN=?");
 			smt.setString(1, password);
 			smt.setString(2, login);
 			smt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
+
 
 	public void insertarVehiculo(int idGps, int idCelda) throws SQLException {
 		PreparedStatement smt;

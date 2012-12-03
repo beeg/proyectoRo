@@ -10,19 +10,27 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import DB.GestorBD;
 
 public class VentanaAdministrador extends JFrame implements ActionListener, ListSelectionListener{
 	private static final long serialVersionUID = 1L;
@@ -38,7 +46,7 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 	private Vehiculo v;
 	private ArrayList<Usuario>arrayUsuarios;
 	
-	public VentanaAdministrador(Vehiculo v){
+	public VentanaAdministrador(final Vehiculo v){
 		this.v=v;
 		//Creacion de componentes
 		bCrearUsuario=new JButton("Crear");
@@ -53,9 +61,10 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		contraseña=new JTextField(15);
 		nombreTipoUsuario=new JTextField(15);
 		nombreTipoUsuario.setEditable(false);
-		cbUsuarios=new JComboBox(v.getlUsuarios().toArray());
-		cbUsuarios.addActionListener(this);
 		arrayUsuarios=v.getlUsuarios();
+		cbUsuarios=new JComboBox();
+		cbUsuarios.setModel(new DefaultComboBoxModel(arrayUsuarios.toArray()));
+		cbUsuarios.addActionListener(this);
 		bDesconectar=new JButton("Desconectar");
 		bDesconectar.addActionListener(this);
 		//Creación de la botonera
@@ -116,27 +125,15 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		this.setTitle("Ventana del servidor numero: "+v.getId());
 		this.setVisible(true);
 		this.setBounds(419,100,700,400);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				v.setTerminar(true);
+				dispose();
+			}
+		});
 		//this.setIconImage(new ImageIcon(getClass().getResource("/icono.jpg")).getImage());
 		cargarUsuarios();
 	}
-	
-	/**
-	 * Metodo para ir insertamdo lineas al box layout
-	 * @param panelContenidos donde se insertar el nuevo panel
-	 * @param l JLabel que se inserta
-	 * @param c Componente que se inserta
-	 */
-	public static void añadirFila(Container panelContenidos,JLabel l, Component c){
-		JPanel pTemp = new JPanel();
-		pTemp.setLayout( new FlowLayout(FlowLayout.LEFT) );
-		pTemp.add(l);
-		pTemp.add(c);
-		panelContenidos.add(pTemp);
-	}
-	
-
-	
 	/**
 	 * Carga la lista de usuarios conectados al servidor
 	 */
@@ -155,36 +152,58 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		if(o==cbUsuarios){
 			 @SuppressWarnings({ "unused", "rawtypes" })
 			Usuario selected =(Usuario) ((JComboBox)o).getSelectedItem();
-			 boolean encontrado=false;
-			 Usuario seleccionado=null;
-			 for(int i=0;i<arrayUsuarios.size()&&!encontrado;i++){
-				 seleccionado=arrayUsuarios.get(i);
-				 if(seleccionado.getLogin().equals(selected)){
-					 encontrado=false;
-				 }
-			 }
 			 cargarUsuario(selected);
 		}else if(o==bDesconectar){
 			String nickL=(String)this.listaUsuariosON.getSelectedValue();
-			Sesion s=null;
-			ArrayList<Sesion>lSesiones=v.getlSesiones();
-			boolean encontrado=false;
-			for(int i=0;i<lSesiones.size()&&!encontrado;i++){
-				s=lSesiones.get(i);
-				if(s.getActualUser().getLogin().equals(nickL)){
-					encontrado=true;
-					lSesiones.remove(i);
+			terminarSesion(nickL);
+			
+		}else if(o==bModificarUsuario){
+			GestorBD gestor=GestorBD.getInstance();
+			try{
+				Usuario selected =(Usuario) ((JComboBox)cbUsuarios).getSelectedItem();
+				String loginNuevo=nombreU.getText();
+				String pass=contraseña.getText();
+				gestor.conectar();
+				gestor.modificarUsuario(selected.getLogin(), loginNuevo,pass);
+				//gestor.setPassword(selected.getLogin(), pass);
+				selected.setLogin(loginNuevo);
+				selected.setPassword(pass);
+				cargarUsuarios();
+			}catch(SQLException e){
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(this,"Login ya en uso", "Error al modificar usuario",JOptionPane.ERROR_MESSAGE);
+			}
+			gestor.desconectar();
+		}else if(o==bCrearUsuario){
+			String loginNuevo=nombreU.getText();
+			String pass=contraseña.getText();
+			GestorBD gestor=GestorBD.getInstance();
+			try {
+				gestor.conectar();
+				gestor.insertarUsuario(loginNuevo, pass);
+				arrayUsuarios.add(new Usuario(loginNuevo,pass));
+				actualizarCb();
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(this,"Login ya en uso", "Error al modificar usuario",JOptionPane.ERROR_MESSAGE);
+			}
+			gestor.desconectar();
+		}else if(o==bBorrarUsuario){
+			Usuario selected =(Usuario) ((JComboBox)cbUsuarios).getSelectedItem();
+			GestorBD gestor=GestorBD.getInstance();
+			gestor.conectar();
+			gestor.borrarUsuario(selected.getLogin());
+			gestor.desconectar();
+			boolean borrado=false;
+			for(int i=0;i<arrayUsuarios.size()&&!borrado;i++){
+				if(arrayUsuarios.get(i).getLogin().equals(selected.getLogin())){
+					borrado=true;
+					arrayUsuarios.remove(i);
 				}
 			}
-			s.terminarSesion();
-			try {
-				s.getsM().CerrarStreams();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			cargarUsuarios();
-			
+			nombreU.setText("");
+			contraseña.setText("");
+			terminarSesion(selected.getLogin());
+			actualizarCb();
 		}
 	}
 	
@@ -215,6 +234,7 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 						encontrado=true;	
 					}
 				}
+				if(encontrado)
 				cargarUsuario(s);
 			}catch(Exception e2){
 				
@@ -229,6 +249,33 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 	public void cargarUsuario(Usuario u){
 		this.nombreU.setText(u.getLogin());
 		this.contraseña.setText(new String(u.getPassword()));		
+	}
+	
+	public void terminarSesion(String nickL){
+		Sesion s=null;
+		ArrayList<Sesion>lSesiones=v.getlSesiones();
+		boolean encontrado=false;
+		for(int i=0;i<lSesiones.size()&&!encontrado;i++){
+			s=lSesiones.get(i);
+			if(s.getActualUser().getLogin().equals(nickL)){
+				encontrado=true;
+				lSesiones.remove(i);
+			}
+		}
+		if(encontrado){
+		s.terminarSesion();
+		try {
+			s.getsM().CerrarStreams();
+			s.getsM().CerrarSocket();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		}
+		cargarUsuarios();
+	}
+	
+	public void actualizarCb(){
+		cbUsuarios.setModel(new DefaultComboBoxModel(arrayUsuarios.toArray()));
 	}
 
 }

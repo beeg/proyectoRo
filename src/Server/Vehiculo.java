@@ -37,10 +37,8 @@ public class Vehiculo {
 		numActualUsuarios=0;
 		terminar=false;
 		GestorBD bd = GestorBD.getInstance();
-		bd.conectar();
 		lUsuarios = bd.getUsuarios();
 		lSensores = bd.getSensores(id);
-		bd.desconectar();
 		lSesiones=new ArrayList<Sesion>();
 		try {
 			ss=new ServerSocket(puerto);
@@ -53,12 +51,26 @@ public class Vehiculo {
 			if(numMaxUsuarios>numActualUsuarios){
 				SocketManager sM = new SocketManager(ss.accept());
 				Sesion s=new Sesion(sM,this);
+				numActualUsuarios++;
 				lSesiones.add(s);
 				new Thread(s).start();
 				cargarUsuariosVentana();
 			}
 		}
+		terminarSesiones();
 		System.out.println("Termino servidor");
+	}
+	public void terminarSesiones(){
+		for(int i=0;i<lSesiones.size();i++){
+			Sesion s=lSesiones.get(i);
+			s.terminarSesion();
+			try{
+				s.getsM().CerrarStreams();
+				s.getsM().CerrarSocket();
+			}catch(IOException e){
+				System.out.println("Error al cerrar todas las sesiones");
+			}
+		}
 	}
 	public void cargarUsuariosVentana(){
 		vAdmin.cargarUsuarios();
