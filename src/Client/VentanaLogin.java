@@ -117,7 +117,12 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				if(c!=null){
-					c.SALIR();
+					try {
+						c.SALIR();
+					} catch (IOException e1) {
+						System.out.println("Error al Salir");
+						e1.printStackTrace();
+					}
 				}
 				dispose();
 			}
@@ -160,7 +165,12 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		} else {
 			if (o == bCancelar) {
 				if(c!=null){
-					c.SALIR();
+					try {
+						c.SALIR();
+					} catch (IOException e) {
+						System.out.println("Error al salir");
+						e.printStackTrace();
+					}
 				}
 				this.dispose();
 			}
