@@ -86,21 +86,24 @@ public class Cliente {
 	 * Metodo para activar un sensor. ON id_sensor
 	 * @param idSensor
 	 */
-	public void onSensor(int idSensor) {
+	public String onSensor(String idSensor) {
+		String resultado="";
 		try {
 			sm.Escribir("ON " + idSensor + '\n');
 			String primerMensaje = sm.Leer();
 			System.out.println(primerMensaje);
+			resultado = primerMensaje;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return resultado;
 	}
 	
 	/**
 	 * Metodo para desactivar un sensor. OFF id_sensor
 	 * @param idSensor
 	 */
-	public void offSensor(int idSensor) {
+	public void offSensor(String idSensor) {
 		try {
 			sm.Escribir("OFF " + idSensor + '\n');
 			String primerMensaje = sm.Leer();
