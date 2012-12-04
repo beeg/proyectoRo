@@ -222,7 +222,7 @@ public class Sesion implements Runnable{
 	 * devuelve un mensaje de error
 	 * @param parametro
 	 */
-	public String tratarOnSensor(String parametro) {
+	public void tratarOnSensor(String parametro) {
 		try	{
 			boolean encontrado=false;
 			Sensor s=null;
@@ -238,14 +238,12 @@ public class Sesion implements Runnable{
 			} catch (NumberFormatException e) {
 				mensajeEnviar = "417 ERR Sensor no existe.\n";
 				sM.Escribir(mensajeEnviar);	
-				return "417 ERR Sensor no existe.";
 			}
 			
 			if(encontrado)	{
 				if(s.isEstado())	{ //ON
 					mensajeEnviar = "418 ERR Sensor en estado ON.\n";
 					sM.Escribir(mensajeEnviar);	
-					return "418 ERR Sensor en estado ON.";
 				} else	{	//OFF
 					s.setEstado(true);
 					GestorBD g = GestorBD.getInstance();
@@ -254,18 +252,15 @@ public class Sesion implements Runnable{
 					g.desconectar();
 					mensajeEnviar = "203 OK Sensor activo.\n";
 					sM.Escribir(mensajeEnviar);	
-					return "203 OK Sensor activo.";
 				}
 			} else	{
 				mensajeEnviar = "417 ERR Sensor no existe.\n";
 				sM.Escribir(mensajeEnviar);	
-				return "417 ERR Sensor no existe.";
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "";
 	}
 	
 	/**
@@ -277,8 +272,9 @@ public class Sesion implements Runnable{
 		try	{
 			boolean encontrado=false;
 			Sensor s=null;
+			int idSensor=0;
 			try	{
-				int idSensor=Integer.parseInt(parametro);
+				idSensor=Integer.parseInt(parametro);
 			
 				for(int i=0; i<lSensores.size() && !encontrado; i++)	{
 					if(lSensores.get(i).getId()==idSensor)	{
@@ -297,7 +293,7 @@ public class Sesion implements Runnable{
 					sM.Escribir(mensajeEnviar);	
 				} else	{	//OFF
 					s.setEstado(false);
-					//actualizar en BD
+					GestorBD.getInstance().setEstadoSensor(idSensor, false);
 					mensajeEnviar = "204 OK Sensor desactivado.\n";
 					sM.Escribir(mensajeEnviar);	
 				}

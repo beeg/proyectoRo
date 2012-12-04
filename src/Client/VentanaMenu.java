@@ -180,23 +180,21 @@ public class VentanaMenu extends JFrame implements ActionListener{
 			}
 		}else if(o==bOnSensor){
 			String resultado=c.onSensor(tID.getText());
-			if(resultado.contains("203"))	{ //OK
-				lMensaje.setText("203 OK Sensor activo.");
-			} else if(resultado.contains("417")) { //ERR
-				lMensaje.setText("417 ERR Sensor no existe.");
-			} else if(resultado.contains("418")) { //ERR
-				lMensaje.setText("418 ERR Sensor en estado ON.");
-			}			
+			lMensaje.setText(resultado);	
 		}else if(o==bOffSensor){
-			
+			String resultado=c.offSensor(tID.getText());
+			lMensaje.setText(resultado);
 		}else if(o==bValAct){
-			
+			String resultado=c.getValAct(tID.getText());
+			lMensaje.setText(resultado);
 		}else if(o==bFoto){
 			
 		}else if(o==bOnGps)	{
-			
-		}else if(o==bOffGps)	{
-			
+			String resultado=c.ONGPS();
+			lMensaje.setText(resultado);
+		}else if(o==bOffGps) {
+			String resultado=c.OFFGPS();
+			lMensaje.setText(resultado);
 		}else if(o==bSalir){
 			try {
 				c.SALIR();

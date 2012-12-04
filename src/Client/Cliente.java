@@ -53,6 +53,17 @@ public class Cliente {
 		}
 		return listaMensajes;
 	}
+	
+	public String getValAct(String id_sensor)	{
+		String mensajeLeido="";
+		try	{
+		sm.Escribir("GET_VALACT" + id_sensor + '\n');
+		mensajeLeido = sm.Leer();
+		} catch(IOException e)	{
+			e.printStackTrace();
+		}
+		return mensajeLeido;
+	}
 
 	/**
 	 * Metodo para recuperar todas las medidas de un sensor. HISTORIDO id_sensor
@@ -87,48 +98,55 @@ public class Cliente {
 	 * @param idSensor
 	 */
 	public String onSensor(String idSensor) {
-		String resultado="";
+		String primerMensaje="";
 		try {
 			sm.Escribir("ON " + idSensor + '\n');
-			String primerMensaje = sm.Leer();
+			primerMensaje = sm.Leer();
 			System.out.println(primerMensaje);
-			resultado = primerMensaje;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return resultado;
+		return primerMensaje;
 	}
 	
 	/**
 	 * Metodo para desactivar un sensor. OFF id_sensor
 	 * @param idSensor
 	 */
-	public void offSensor(String idSensor) {
+	public String offSensor(String idSensor) {
+		String primerMensaje ="";
 		try {
 			sm.Escribir("OFF " + idSensor + '\n');
-			String primerMensaje = sm.Leer();
+			primerMensaje = sm.Leer();
 			System.out.println(primerMensaje);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return primerMensaje;
 	}
 	
-	public void ONGPS(){
+	public String ONGPS(){
+		String resultado="";
 		try {
 			sm.Escribir("ONGPS\n");
-			System.out.println(sm.Leer());
+			resultado=sm.Leer();
+			System.out.println(resultado);
 		} catch (IOException e) {
 			System.out.println("Error en GPS en cliente");
 		}
+		return resultado;
 	}
 	
-	public void OFFGPS(){
+	public String OFFGPS(){
+		String resultado="";
 		try {
 			sm.Escribir("OFFGPS \n");
-			System.out.println(sm.Leer());
+			resultado=sm.Leer();
+			System.out.println(resultado);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return resultado;
 	}
 	public void SALIR() throws IOException{
 		sm.Escribir("SALIR \n");
