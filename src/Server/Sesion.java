@@ -39,14 +39,17 @@ public class Sesion implements Runnable{
 			}	catch(IOException e)	{}	
 		}
 		try{
-			if(!terminar)
+			if(!terminar){
 			sM.Escribir("208 OK Adiós\n");	
-			v.setNumActualUsuarios(v.getNumActualUsuarios()-1);
-			System.out.println("termina la sesion");
+				sM.CerrarStreams();
+				sM.CerrarSocket();
+			}
+			v.setNumActualUsuarios(v.getNumActualUsuarios()-1,actualUser.getLogin());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		System.out.println("Termino de todo la sesion");
 	}
 
 	/**

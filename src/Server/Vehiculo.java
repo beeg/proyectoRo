@@ -47,6 +47,7 @@ public class Vehiculo {
 		}
 	}
 	public void activarServidor() throws IOException{
+		try{
 		while(!terminar){
 			if(numMaxUsuarios>numActualUsuarios){
 				SocketManager sM = new SocketManager(ss.accept());
@@ -56,6 +57,9 @@ public class Vehiculo {
 				new Thread(s).start();
 				cargarUsuariosVentana();
 			}
+		}
+		}catch(IOException e){
+			
 		}
 		terminarSesiones();
 		System.out.println("Termino servidor");
@@ -130,9 +134,14 @@ public class Vehiculo {
 	public int getNumActualUsuarios() {
 		return numActualUsuarios;
 	}
-	public void setNumActualUsuarios(int numActualUsuarios) {
+	public void setNumActualUsuarios(int numActualUsuarios, String login) {
 		this.numActualUsuarios = numActualUsuarios;
 		vAdmin.actualizarNumAct(numActualUsuarios);
+		for (int i=0;i<lSesiones.size();i++){
+			if(lSesiones.get(i).getActualUser().getLogin().equals(login)){
+				lSesiones.remove(i);
+			}
+		}
 		vAdmin.cargarUsuarios();
 	}
 	public boolean isTerminar() {

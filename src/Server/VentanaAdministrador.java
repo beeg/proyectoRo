@@ -33,7 +33,7 @@ import javax.swing.event.ListSelectionListener;
 
 import DB.GestorBD;
 
-public class VentanaAdministrador extends JFrame implements ActionListener, ListSelectionListener{
+public class VentanaAdministrador extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JButton bCrearUsuario;
 	private JButton bBorrarUsuario;
@@ -60,7 +60,7 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		bModificarUsuario=new JButton("Modificar");
 		bModificarUsuario.addActionListener(this);
 		listaUsuariosON=new JList();
-		listaUsuariosON.addListSelectionListener(this);
+		//listaUsuariosON.addListSelectionListener(this);
 		nombreU=new JTextField(15);
 		contraseña=new JTextField(15);
 		nombreTipoUsuario=new JTextField(15);
@@ -158,6 +158,10 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				v.setTerminar(true);
+				try {
+					v.getSs().close();
+				} catch (IOException e1) {
+				}
 				dispose();
 			}
 		});
@@ -198,7 +202,6 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 				String pass=contraseña.getText();
 				gestor.conectar();
 				gestor.modificarUsuario(selected.getLogin(), loginNuevo,pass);
-				//gestor.setPassword(selected.getLogin(), pass);
 				selected.setLogin(loginNuevo);
 				selected.setPassword(pass);
 				cargarUsuarios();
@@ -259,7 +262,7 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		field.setSelectionStart(0);
 		field.setSelectionEnd(field.getText().length());
 	}
-
+	/*
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
 		Object o=event.getSource();
@@ -283,6 +286,7 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		}
 		
 	}
+	*/
 	/**
 	 * Carga los JTextField de la pestaña de gestión de usuarios
 	 * @param u
@@ -305,11 +309,11 @@ public class VentanaAdministrador extends JFrame implements ActionListener, List
 		}
 		if(encontrado){
 		s.terminarSesion();
-		try {
+		try{   
 			s.getsM().CerrarStreams();
 			s.getsM().CerrarSocket();
-		} catch (IOException e) {
-			e.printStackTrace();
+		}catch( IOException e){
+	
 		}
 		}
 		cargarUsuarios();

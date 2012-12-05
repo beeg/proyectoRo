@@ -29,9 +29,6 @@ import Util.SocketManager;
  * @author Aritz Ventana con la que se creará un nuevo usuario.
  */
 public class VentanaLogin extends JFrame implements ActionListener {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField nick;
 	private JPasswordField password;
