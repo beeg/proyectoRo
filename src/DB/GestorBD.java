@@ -13,7 +13,7 @@ import Server.Medida;
 import Server.Sensor;
 import Server.Usuario;
 import Server.Vehiculo;
-import Util.SocketManager;
+import ServerLocalizacion.Celda;
 
 public class GestorBD {
 	private Connection conexion;
@@ -231,7 +231,6 @@ public class GestorBD {
 			smt.setInt(2, id);
 			smt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -246,7 +245,6 @@ public class GestorBD {
 			smt.setDate(1, d);
 			smt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -268,9 +266,19 @@ public class GestorBD {
 			smt.setInt(2, id);
 			smt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public Celda getCelda(int idCelda) throws SQLException {
+		PreparedStatement smt;
+		Celda c;
+		smt = conexion.prepareStatement("SELECT * FROM CELDA where ID=?");
+		smt.setInt(1, idCelda);
+		ResultSet rs = smt.executeQuery();
+		c = new Celda(idCelda, rs.getString(2), rs.getString(3));
+		return c;
+
 	}
 
 	public static void main(String[] args) {

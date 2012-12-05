@@ -36,4 +36,8 @@ public class Celda {
 		this.longitud = longitud;
 	}
 
+	public String toString() {
+		return latitud + "-" + longitud;
+	}
+
 }
