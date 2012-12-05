@@ -1,15 +1,15 @@
 package ServerLocalizacion;
 
 public class Celda {
-	
+
 	private int id;
 	private String latitud;
 	private String longitud;
-	
-	public Celda(int id,String latitud,String longitud)	{
-		this.id=id;
-		this.latitud=latitud;
-		this.longitud=longitud;
+
+	public Celda(int id, String latitud, String longitud) {
+		this.id = id;
+		this.latitud = latitud;
+		this.longitud = longitud;
 	}
 
 	public int getId() {
@@ -35,5 +35,5 @@ public class Celda {
 	public void setLongitud(String longitud) {
 		this.longitud = longitud;
 	}
-	
+
 }

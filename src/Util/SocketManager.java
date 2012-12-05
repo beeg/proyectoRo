@@ -4,7 +4,7 @@ import java.net.*;
 import java.io.*;
 
 public class SocketManager {
-	
+
 	private Socket mySocket;
 	private DataOutputStream bufferEscritura;
 	private BufferedReader bufferLectura;
