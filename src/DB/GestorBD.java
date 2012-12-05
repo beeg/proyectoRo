@@ -233,6 +233,21 @@ public class GestorBD {
 		}
 	}
 	
+	public void setFechaMedida(int idSensor) {
+		PreparedStatement smt;
+		try {
+			smt = conexion
+					.prepareStatement("UPDATE MEDIDA SET FECHA=? WHERE ID=?");
+			smt.setInt(2, idSensor);
+			java.sql.Date d = new java.sql.Date(2010-1900,4-1,8);
+			smt.setDate(1, d);
+			smt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public GPS getGPS(int id) throws SQLException {
 		PreparedStatement smt;
 		smt = conexion.prepareStatement("SELECT * FROM GPS where ID=?");
@@ -256,11 +271,17 @@ public class GestorBD {
 	}
 
 	public static void main(String[] args) {
-		GestorBD gestor = GestorBD.getInstance();
+		GestorBD g = GestorBD.getInstance();
+		g.conectar();
+		ArrayList<Medida> m = g.getMedidas(1);
+		for(int i=0;i<m.size();i++)	{
+			System.out.println(m.get(i).getDate());
+		}
+		g.desconectar();
+		/*GestorBD gestor = GestorBD.getInstance();
 		gestor.conectar();
-		ArrayList<Sensor> lSensores = gestor.getSensores(1);
-		Sensor s = lSensores.get(0);
-		gestor.desconectar();
+		gestor.setFechaMedida(1);
+		gestor.desconectar();*/
 	}
 
 }

@@ -172,7 +172,8 @@ public class VentanaMenu extends JFrame implements ActionListener{
 		}else if(o==bHistorico){
 			ArrayList<String>medidas=c.historico(tID.getText());
 			if(medidas.get(0).contains("113"))	{ //Correcto
-				
+				VentanaHistorico v = new VentanaHistorico(medidas);
+				v.setVisible(true);
 			} else if(medidas.get(0).contains("414"))	{
 				lMensaje.setText("414 ERR Sensor desconocido");
 			} else if(medidas.get(0).contains("415"))	{
