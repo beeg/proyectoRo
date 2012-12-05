@@ -293,7 +293,9 @@ public class Sesion implements Runnable{
 					sM.Escribir(mensajeEnviar);	
 				} else	{	//OFF
 					s.setEstado(false);
+					GestorBD.getInstance().conectar();
 					GestorBD.getInstance().setEstadoSensor(idSensor, false);
+					GestorBD.getInstance().desconectar();
 					mensajeEnviar = "204 OK Sensor desactivado.\n";
 					sM.Escribir(mensajeEnviar);	
 				}

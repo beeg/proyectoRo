@@ -23,18 +23,13 @@ public class VentanaHistorico extends JFrame{
 	     lFin.setText("212 OK Lista Finalizada");
 	     
 	        tMedidas.setModel(new javax.swing.table.DefaultTableModel(
-	            new Object [][] {
-	                {null, null, null, null},
-	                {null, null, null, null},
-	                {null, null, null, null},
-	                {null, null, null, null}
-	            },
+	            tratarMedidas(lMedidas),
 	            new String [] {
-	                "Fecha", "Latitud", "Longitud", "Valor"
+	                "Fecha", "Hora", "Latitud", "Longitud", "Valor"
 	            }
 	        ) {
 	            Class[] types = new Class [] {
-	                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+	                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
 	            };
 
 	            public Class getColumnClass(int columnIndex) {
@@ -77,5 +72,38 @@ public class VentanaHistorico extends JFrame{
 	        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 	        pack();
-	}
+}
+	
+public String[][] tratarMedidas(ArrayList<String>medidas)	{
+	String[][] m = new String[medidas.size()][5];
+	medidas.remove(medidas.size()-1);
+	medidas.remove(0);
+	
+	for(int j=0;j<medidas.size();j++)	{
+		String cadena=medidas.get(j);	
+		String[] sCadena = cadena.split(";");
+		String f=sCadena[0];
+		String h=sCadena[1];
+		String coor=sCadena[2];
+		String[] sCoor = coor.split("-");
+		String lat=sCoor[0];
+		String log=sCoor[1];
+		String v=sCadena[3];
+		for(int i=0;i<5;i++)	{			
+			switch(i)	{
+			case 0: //Fecha		
+				m[j][i]=f; break;
+			case 1:	//Hora
+				m[j][i]=h; break;
+			case 2: //Latitud
+				m[j][i]=lat; break;
+			case 3: //Longitud
+				m[j][i]=log; break;
+			case 4: //Valor
+				m[j][i]=v; break;
+			}
+		}
+	}	
+	return m;
+}
 }
