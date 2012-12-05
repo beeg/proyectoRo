@@ -179,17 +179,22 @@ public class VentanaMenu extends JFrame implements ActionListener{
 				lMensaje.setText("415 ERR Falta parámetro id_sensor");
 			}
 		}else if(o==bOnSensor){
-			
+			String resultado=c.onSensor(tID.getText());
+			lMensaje.setText(resultado);	
 		}else if(o==bOffSensor){
-			
+			String resultado=c.offSensor(tID.getText());
+			lMensaje.setText(resultado);
 		}else if(o==bValAct){
-			
+			String resultado=c.getValAct(tID.getText());
+			lMensaje.setText(resultado);
 		}else if(o==bFoto){
 			
 		}else if(o==bOnGps)	{
-			
-		}else if(o==bOffGps)	{
-			
+			String resultado=c.ONGPS();
+			lMensaje.setText(resultado);
+		}else if(o==bOffGps) {
+			String resultado=c.OFFGPS();
+			lMensaje.setText(resultado);
 		}else if(o==bSalir){
 			try {
 				c.SALIR();

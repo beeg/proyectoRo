@@ -255,7 +255,7 @@ public class Sesion implements Runnable{
 				}
 			} else	{
 				mensajeEnviar = "417 ERR Sensor no existe.\n";
-				sM.Escribir(mensajeEnviar);				
+				sM.Escribir(mensajeEnviar);	
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -272,8 +272,9 @@ public class Sesion implements Runnable{
 		try	{
 			boolean encontrado=false;
 			Sensor s=null;
+			int idSensor=0;
 			try	{
-				int idSensor=Integer.parseInt(parametro);
+				idSensor=Integer.parseInt(parametro);
 			
 				for(int i=0; i<lSensores.size() && !encontrado; i++)	{
 					if(lSensores.get(i).getId()==idSensor)	{
@@ -292,7 +293,7 @@ public class Sesion implements Runnable{
 					sM.Escribir(mensajeEnviar);	
 				} else	{	//OFF
 					s.setEstado(false);
-					//actualizar en BD
+					GestorBD.getInstance().setEstadoSensor(idSensor, false);
 					mensajeEnviar = "204 OK Sensor desactivado.\n";
 					sM.Escribir(mensajeEnviar);	
 				}
