@@ -38,30 +38,25 @@ public class Cliente {
 	/**
 	 * Metodo para mandar el comando LISTSENSOR
 	 */
-	public ArrayList<String> listSensor() {
+	public ArrayList<String> listSensor() throws IOException{
 		ArrayList<String>listaMensajes=new ArrayList<String>();
-		try {
-			sm.Escribir("LISTSENSOR" + '\n');
-			String mensajeLeido = sm.Leer();
+		sm.Escribir("LISTSENSOR" + '\n');
+		String mensajeLeido = sm.Leer();
+		listaMensajes.add(mensajeLeido);
+		while (!mensajeLeido.contains("212")) {
+			mensajeLeido = sm.Leer();
 			listaMensajes.add(mensajeLeido);
-			while (!mensajeLeido.contains("212")) {
-				mensajeLeido = sm.Leer();
-				listaMensajes.add(mensajeLeido);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return listaMensajes;
 	}
 	
-	public String getValAct(String id_sensor)	{
-		String mensajeLeido="";
-		try	{
-		sm.Escribir("GET_VALACT" + id_sensor + '\n');
+	public String getValAct(String id_sensor) throws IOException{
+		System.out.println("CLIENTE VALACT");
+		String mensajeLeido="";		
+		sm.Escribir("GET_VALACT " + id_sensor + '\n');	
+		System.out.println("FIN ESCRIBIR CLIENTE VALACT");
 		mensajeLeido = sm.Leer();
-		} catch(IOException e)	{
-			e.printStackTrace();
-		}
+		System.out.println("Valact leidooooooo");
 		return mensajeLeido;
 	}
 
@@ -69,27 +64,22 @@ public class Cliente {
 	 * Metodo para recuperar todas las medidas de un sensor. HISTORIDO id_sensor
 	 * @param idSensor
 	 */
-	public ArrayList<String> historico(String idSensor) {
+	public ArrayList<String> historico(String idSensor) throws IOException{
 		ArrayList<String> medidas = new ArrayList<String>();
-		try {
-			sm.Escribir("HISTORICO " + idSensor + '\n');
-			String primerMensaje = sm.Leer();
-			medidas.add(primerMensaje);
-			System.out.println(primerMensaje);
-			if (primerMensaje.contains("113")) {
-				String mensajeLeido = sm.Leer();				
-				while (!mensajeLeido.contains("212")) {
-					medidas.add(mensajeLeido);
-					System.out.println(mensajeLeido);
-					mensajeLeido = sm.Leer();
+		sm.Escribir("HISTORICO " + idSensor + '\n');
+		String primerMensaje = sm.Leer();
+		medidas.add(primerMensaje);
+		System.out.println(primerMensaje);
+		if (primerMensaje.contains("113")) {
+			String mensajeLeido = sm.Leer();				
+			while (!mensajeLeido.contains("212")) {
+				medidas.add(mensajeLeido);
+				System.out.println(mensajeLeido);
+				mensajeLeido = sm.Leer();
 				}
 				System.out.println(mensajeLeido);
 				medidas.add(mensajeLeido);
 			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return medidas;
 	}
 	
@@ -97,15 +87,11 @@ public class Cliente {
 	 * Metodo para activar un sensor. ON id_sensor
 	 * @param idSensor
 	 */
-	public String onSensor(String idSensor) {
+	public String onSensor(String idSensor) throws IOException{
 		String primerMensaje="";
-		try {
-			sm.Escribir("ON " + idSensor + '\n');
-			primerMensaje = sm.Leer();
-			System.out.println(primerMensaje);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sm.Escribir("ON " + idSensor + '\n');
+		primerMensaje = sm.Leer();
+		System.out.println(primerMensaje);
 		return primerMensaje;
 	}
 	
@@ -113,39 +99,27 @@ public class Cliente {
 	 * Metodo para desactivar un sensor. OFF id_sensor
 	 * @param idSensor
 	 */
-	public String offSensor(String idSensor) {
+	public String offSensor(String idSensor) throws IOException{
 		String primerMensaje ="";
-		try {
-			sm.Escribir("OFF " + idSensor + '\n');
-			primerMensaje = sm.Leer();
-			System.out.println(primerMensaje);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sm.Escribir("OFF " + idSensor + '\n');
+		primerMensaje = sm.Leer();
+		System.out.println(primerMensaje);
 		return primerMensaje;
 	}
 	
-	public String ONGPS(){
+	public String ONGPS() throws IOException{
 		String resultado="";
-		try {
-			sm.Escribir("ONGPS\n");
-			resultado=sm.Leer();
-			System.out.println(resultado);
-		} catch (IOException e) {
-			System.out.println("Error en GPS en cliente");
-		}
+		sm.Escribir("ONGPS\n");
+		resultado=sm.Leer();
+		System.out.println(resultado);
 		return resultado;
 	}
 	
-	public String OFFGPS(){
+	public String OFFGPS() throws IOException{
 		String resultado="";
-		try {
-			sm.Escribir("OFFGPS \n");
-			resultado=sm.Leer();
+		sm.Escribir("OFFGPS \n");
+		resultado=sm.Leer();
 			System.out.println(resultado);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return resultado;
 	}
 	public void SALIR() throws IOException{

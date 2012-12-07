@@ -275,7 +275,7 @@ public class GestorBD {
 		g.conectar();
 		ArrayList<Medida> m = g.getMedidas(1);
 		for(int i=0;i<m.size();i++)	{
-			System.out.println(m.get(i).getDate());
+			System.out.println(m.get(i));
 		}
 		g.desconectar();
 		/*GestorBD gestor = GestorBD.getInstance();

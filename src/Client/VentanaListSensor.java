@@ -71,7 +71,8 @@ public class VentanaListSensor extends JFrame{
                 .addComponent(lFinal)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
+        
+        
         pack();
 	}
 	

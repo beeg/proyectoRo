@@ -291,7 +291,7 @@ public class Sesion implements Runnable{
 			}
 			
 			if(encontrado)	{
-				if(s.isEstado())	{ //OFF
+				if(!s.isEstado())	{ //OFF
 					mensajeEnviar = "419 ERR Sensor en estado OFF.\n";
 					sM.Escribir(mensajeEnviar);	
 				} else	{	//OFF
@@ -390,12 +390,21 @@ public class Sesion implements Runnable{
 					}
 					if (encontrado) {
 						if(sensor.isEstado()){
-							//preguntar qué medida hay que mandar.
+							GestorBD g = GestorBD.getInstance();
+							g.conectar();
+							Medida m = g.getMedidas(1).get(0);
+							g.desconectar();
+							mensajeEnviar="114 OK "+m.toString()+"\n";
+							System.out.println("Mensaje enviar: "+mensajeEnviar);
+							System.out.println("antes de escribir mensaje");
+							sM.Escribir(mensajeEnviar);
+							System.out.println("despues de escribir mensaje");
 						}else{
 							mensajeEnviar="416 Sensor en OFF\n";
 							sM.Escribir(mensajeEnviar);
 						}
 					} else {
+						System.out.println("no encontrado");
 						mensajeEnviar = "414 ERR Sensor desconocido\n";
 						sM.Escribir(mensajeEnviar);
 					}

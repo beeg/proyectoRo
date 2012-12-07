@@ -37,9 +37,6 @@ public class VentanaHistorico extends JFrame{
 	            }
 	        });
 	        sMedidas.setViewportView(tMedidas);
-
-	        
-
 	        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 	        getContentPane().setLayout(layout);
 	        layout.setHorizontalGroup(
@@ -69,8 +66,6 @@ public class VentanaHistorico extends JFrame{
 	                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 	        );
 	 
-	        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
 	        pack();
 }
 	
