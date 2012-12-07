@@ -2,7 +2,6 @@ package Server;
 
 import java.util.ArrayList;
 
-
 public class Sensor {
 	private int id;
 	private String desc;

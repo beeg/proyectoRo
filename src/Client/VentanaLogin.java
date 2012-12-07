@@ -2,7 +2,6 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -25,9 +24,6 @@ import javax.swing.border.LineBorder;
 
 import Util.SocketManager;
 
-/**
- * @author Aritz Ventana con la que se creará un nuevo usuario.
- */
 public class VentanaLogin extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JTextField nick;
@@ -41,17 +37,11 @@ public class VentanaLogin extends JFrame implements ActionListener {
 	private Cliente c;
 	private SocketManager sm;
 
-	/**
-	 * @param pvL
-	 *            Ventana de donde es llamado
-	 * @param sU
-	 *            Sistema Usuarios para poder insertar el nuevo usuario
-	 */
 	public VentanaLogin() {
 		// Creacion de Componentes
-		mensajes=new JLabel();
-		green=new Color(0,255,0);
-		red=new Color(255,0,0);
+		mensajes = new JLabel();
+		green = new Color(0, 255, 0);
+		red = new Color(255, 0, 0);
 		nick = new JTextField(12);
 		nick.setEnabled(true);
 		nick.setColumns(15);
@@ -100,8 +90,8 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		// Poner el fondo y los bordes de color.
 		panel.setBackground(Color.GRAY);
 		((JComponent) panel).setBorder(new LineBorder(Color.BLACK));
-		Container principal=new JPanel();
-		principal.setLayout(new BoxLayout(principal,BoxLayout.Y_AXIS));
+		Container principal = new JPanel();
+		principal.setLayout(new BoxLayout(principal, BoxLayout.Y_AXIS));
 		principal.add(panel);
 		principal.add(mensajes);
 		this.getContentPane().add(principal);
@@ -113,7 +103,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		// Para cuando le da a la x se comporte como si fuese el boton cancelar
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				if(c!=null){
+				if (c != null) {
 					try {
 						c.SALIR();
 					} catch (IOException e1) {
@@ -129,39 +119,50 @@ public class VentanaLogin extends JFrame implements ActionListener {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		Object o = a.getSource();
 		if (o == bLogin) {
 			String mensaje;
-			try{
-				if(c==null)	{
+			try {
+				if (c == null) {
 					sm = new SocketManager(ip.getText(), 5888);
-					c=new Cliente(sm);
+					c = new Cliente(sm);
 				}
-				mensaje=c.userLogin(this.nick.getText());
-			if(mensaje.contains("201")){
-				mensajes.setBackground(green);
-				mensajes.setText(mensaje);
-				mensaje=c.passLogin(this.password.getText());
-				if(mensaje.contains("202")){
-					VentanaMenu vm=new VentanaMenu(c);
-					vm.setVisible(true);
-					this.dispose();
-				}else{
-					JOptionPane.showMessageDialog(this,mensaje, "Error al logear",JOptionPane.ERROR_MESSAGE);
+				mensaje = c.userLogin(this.nick.getText());
+				if (mensaje.contains("201")) {
+					mensajes.setBackground(green);
+					mensajes.setText(mensaje);
+					mensaje = c.passLogin(this.password.getText());
+					if (mensaje.contains("202")) {
+						VentanaMenu vm = new VentanaMenu(c);
+						vm.setVisible(true);
+						this.dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, mensaje,
+								"Error al logear", JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					if (mensaje.contains("444")) {
+						JOptionPane.showMessageDialog(this, mensaje,
+								"Servidor lleno", JOptionPane.ERROR_MESSAGE);
+						c = null;
+						sm.CerrarStreams();
+						sm.CerrarSocket();
+					} else {
+						mensajes.setBackground(red);
+						mensajes.setText(mensaje);
+						JOptionPane.showMessageDialog(this, mensaje,
+								"Error al logear", JOptionPane.ERROR_MESSAGE);
+					}
 				}
-			}else{
-				mensajes.setBackground(red);
-				mensajes.setText(mensaje);
-				JOptionPane.showMessageDialog(this,mensaje, "Error al logear",JOptionPane.ERROR_MESSAGE);
-			}
-			}catch(IOException e){
+			} catch (IOException e) {
 				System.out.println("Excepcion b login");
 			}
 		} else {
 			if (o == bCancelar) {
-				if(c!=null){
+				if (c != null) {
 					try {
 						c.SALIR();
 					} catch (IOException e) {

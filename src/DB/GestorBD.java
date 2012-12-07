@@ -13,7 +13,7 @@ import Server.Medida;
 import Server.Sensor;
 import Server.Usuario;
 import Server.Vehiculo;
-import Util.SocketManager;
+import ServerLocalizacion.Celda;
 
 public class GestorBD {
 	private Connection conexion;
@@ -71,12 +71,13 @@ public class GestorBD {
 	}
 
 	public void borrarUsuario(String login) {
-		try{
-		PreparedStatement smt;
-		smt = conexion.prepareStatement("DELETE FROM USUARIO WHERE LOGIN=?");
-		smt.setString(1, login);
-		smt.executeUpdate();
-		}catch(SQLException e){
+		try {
+			PreparedStatement smt;
+			smt = conexion
+					.prepareStatement("DELETE FROM USUARIO WHERE LOGIN=?");
+			smt.setString(1, login);
+			smt.executeUpdate();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -109,24 +110,25 @@ public class GestorBD {
 		return listaUsuarios;
 	}
 
-	public void modificarUsuario(String loginViejo,String loginNuevo, String password) throws SQLException {
+	public void modificarUsuario(String loginViejo, String loginNuevo,
+			String password) throws SQLException {
 		PreparedStatement smt;
-			smt = conexion
-					.prepareStatement("UPDATE USUARIO SET PASSWORD=?,LOGIN=? WHERE LOGIN=?");
-			smt.setString(1, password);
-			smt.setString(2, loginNuevo);
-			smt.setString(3, loginViejo);
-			smt.executeUpdate();
-	}
-	public void setPassword(String login,String password) throws SQLException {
-		PreparedStatement smt;
-			smt = conexion
-					.prepareStatement("UPDATE USUARIO SET PASSWORD=? WHERE LOGIN=?");
-			smt.setString(1, password);
-			smt.setString(2, login);
-			smt.executeUpdate();
+		smt = conexion
+				.prepareStatement("UPDATE USUARIO SET PASSWORD=?,LOGIN=? WHERE LOGIN=?");
+		smt.setString(1, password);
+		smt.setString(2, loginNuevo);
+		smt.setString(3, loginViejo);
+		smt.executeUpdate();
 	}
 
+	public void setPassword(String login, String password) throws SQLException {
+		PreparedStatement smt;
+		smt = conexion
+				.prepareStatement("UPDATE USUARIO SET PASSWORD=? WHERE LOGIN=?");
+		smt.setString(1, password);
+		smt.setString(2, login);
+		smt.executeUpdate();
+	}
 
 	public void insertarVehiculo(int idGps, int idCelda) throws SQLException {
 		PreparedStatement smt;
@@ -148,10 +150,11 @@ public class GestorBD {
 		smt = conexion.prepareStatement("SELECT * FROM VEHICULO where ID=?");
 		smt.setInt(1, id);
 		ResultSet rs = smt.executeQuery();
-		return new Vehiculo(id, getGPS(rs.getInt(2)),rs.getInt(3),5888);
+		return new Vehiculo(id, getGPS(rs.getInt(2)), rs.getInt(3), 5888);
 	}
 
-	public void insertarSensor(String desc, boolean estado, int idVehiculo) throws SQLException {
+	public void insertarSensor(String desc, boolean estado, int idVehiculo)
+			throws SQLException {
 		PreparedStatement smt;
 		smt = conexion.prepareStatement("insert into SENSOR values(?,?,?)");
 		smt.setString(1, desc);
@@ -218,7 +221,7 @@ public class GestorBD {
 		return lMedidas;
 
 	}
-	
+
 	public void setEstadoSensor(int id, boolean est) {
 		PreparedStatement smt;
 		try {
@@ -228,26 +231,24 @@ public class GestorBD {
 			smt.setInt(2, id);
 			smt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void setFechaMedida(int idSensor) {
 		PreparedStatement smt;
 		try {
 			smt = conexion
 					.prepareStatement("UPDATE MEDIDA SET FECHA=? WHERE ID=?");
 			smt.setInt(2, idSensor);
-			java.sql.Date d = new java.sql.Date(2010-1900,4-1,8);
+			java.sql.Date d = new java.sql.Date(2010 - 1900, 4 - 1, 8);
 			smt.setDate(1, d);
 			smt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public GPS getGPS(int id) throws SQLException {
 		PreparedStatement smt;
 		smt = conexion.prepareStatement("SELECT * FROM GPS where ID=?");
@@ -255,7 +256,7 @@ public class GestorBD {
 		ResultSet rs = smt.executeQuery();
 		return new GPS(id, rs.getBoolean(4), rs.getString(2), rs.getString(3));
 	}
-	
+
 	public void setEstadoGPS(int id, boolean est) {
 		PreparedStatement smt;
 		try {
@@ -265,23 +266,38 @@ public class GestorBD {
 			smt.setInt(2, id);
 			smt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public Celda getCelda(int idCelda) throws SQLException {
+		PreparedStatement smt;
+		Celda c;
+		smt = conexion.prepareStatement("SELECT * FROM CELDA where ID=?");
+		smt.setInt(1, idCelda);
+		ResultSet rs = smt.executeQuery();
+		c = new Celda(idCelda, rs.getString(2), rs.getString(3));
+		return c;
+
 	}
 
 	public static void main(String[] args) {
 		GestorBD g = GestorBD.getInstance();
 		g.conectar();
 		ArrayList<Medida> m = g.getMedidas(1);
+<<<<<<< HEAD
 		for(int i=0;i<m.size();i++)	{
 			System.out.println(m.get(i));
+=======
+		for (int i = 0; i < m.size(); i++) {
+			System.out.println(m.get(i).getDate());
+>>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 		}
 		g.desconectar();
-		/*GestorBD gestor = GestorBD.getInstance();
-		gestor.conectar();
-		gestor.setFechaMedida(1);
-		gestor.desconectar();*/
+		/*
+		 * GestorBD gestor = GestorBD.getInstance(); gestor.conectar();
+		 * gestor.setFechaMedida(1); gestor.desconectar();
+		 */
 	}
 
 }

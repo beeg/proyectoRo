@@ -1,17 +1,17 @@
 package Server;
 
 public class GPS {
-	
+
 	private int id;
 	private boolean estado;
 	private String latitud;
 	private String longitud;
-	
-	public GPS (int id,boolean estado, String latitud, String longitud)	{
-		this.id=id;
-		this.estado=estado;
-		this.latitud=latitud;
-		this.longitud=longitud;
+
+	public GPS(int id, boolean estado, String latitud, String longitud) {
+		this.id = id;
+		this.estado = estado;
+		this.latitud = latitud;
+		this.longitud = longitud;
 	}
 
 	public boolean isEstado() {
@@ -45,6 +45,5 @@ public class GPS {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
 
 }
