@@ -256,21 +256,14 @@ public class VentanaMenu extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent a) {
 		Object o = a.getSource();
-<<<<<<< HEAD
 		if(o==bListSensor){
 			try	{
 			ArrayList<String>sensores=c.listSensor();
-			for(int i=0;i<sensores.size();i++){				
-=======
-		if (o == bListSensor) {
-			ArrayList<String> sensores = c.listSensor();
-			for (int i = 0; i < sensores.size(); i++) {
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
+			for(int i=0;i<sensores.size();i++){
 				System.out.println(sensores.get(i));
 			}
 			VentanaListSensor v = new VentanaListSensor(sensores);
 			v.setVisible(true);
-<<<<<<< HEAD
 			} catch(IOException e)	{
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
 				lMensaje.setForeground(new Color(255,0,0));
@@ -279,28 +272,18 @@ public class VentanaMenu extends JFrame implements ActionListener {
 			try	{
 			ArrayList<String>medidas=c.historico(tID.getText());
 			if(medidas.get(0).contains("113"))	{ //Correcto
-=======
-		} else if (o == bHistorico) {
-			ArrayList<String> medidas = c.historico(tID.getText());
-			if (medidas.get(0).contains("113")) { // Correcto
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 				VentanaHistorico v = new VentanaHistorico(medidas);
 				v.setVisible(true);
 			} else if (medidas.get(0).contains("414")) {
 				lMensaje.setText("414 ERR Sensor desconocido");
-<<<<<<< HEAD
 				lMensaje.setForeground(new Color(255,0,0));
 			} else if(medidas.get(0).contains("415"))	{
-=======
-			} else if (medidas.get(0).contains("415")) {
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 				lMensaje.setText("415 ERR Falta parámetro id_sensor");
 				lMensaje.setForeground(new Color(255,0,0));
 			}	} catch(IOException e)	{
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
 				lMensaje.setForeground(new Color(255,0,0));
 			}
-<<<<<<< HEAD
 		}else if(o==bOnSensor){
 			try	{
 			String resultado=c.onSensor(tID.getText());
@@ -369,26 +352,6 @@ public class VentanaMenu extends JFrame implements ActionListener {
 				lMensaje.setForeground(new Color(255,0,0));
 			}
 		}else if(o==bSalir){
-=======
-		} else if (o == bOnSensor) {
-			String resultado = c.onSensor(tID.getText());
-			lMensaje.setText(resultado);
-		} else if (o == bOffSensor) {
-			String resultado = c.offSensor(tID.getText());
-			lMensaje.setText(resultado);
-		} else if (o == bValAct) {
-			String resultado = c.getValAct(tID.getText());
-			lMensaje.setText(resultado);
-		} else if (o == bFoto) {
-
-		} else if (o == bOnGps) {
-			String resultado = c.ONGPS();
-			lMensaje.setText(resultado);
-		} else if (o == bOffGps) {
-			String resultado = c.OFFGPS();
-			lMensaje.setText(resultado);
-		} else if (o == bSalir) {
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 			try {
 				c.SALIR();
 			} catch (IOException e) {

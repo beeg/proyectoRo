@@ -19,7 +19,6 @@ public class VentanaListSensor extends JFrame {
 
 		// Inicializar componentes
 		lOK = new javax.swing.JLabel();
-<<<<<<< HEAD
         sTabla = new javax.swing.JScrollPane();
         tSensores = new javax.swing.JTable();
         lFinal = new javax.swing.JLabel();
@@ -75,77 +74,6 @@ public class VentanaListSensor extends JFrame {
         
         
         pack();
-=======
-		sTabla = new javax.swing.JScrollPane();
-		tSensores = new javax.swing.JTable();
-		lFinal = new javax.swing.JLabel();
-		this.lSensores = lSensores;
-
-		lOK.setText("112 OK Lista de sensores");
-		lFinal.setText("212 OK Lista finalizada");
-
-		tSensores.setModel(new javax.swing.table.DefaultTableModel(
-				listaSensores(lSensores), new String[] { "ID Sensor",
-						"Descripción", "Estado" }) {
-			Class[] types = new Class[] { java.lang.String.class,
-					java.lang.String.class, java.lang.Object.class };
-
-			public Class getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-		});
-		sTabla.setViewportView(tSensores);
-
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-				getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						layout.createSequentialGroup()
-								.addGroup(
-										layout.createParallelGroup(
-												javax.swing.GroupLayout.Alignment.LEADING)
-												.addGroup(
-														layout.createSequentialGroup()
-																.addGap(38, 38,
-																		38)
-																.addComponent(
-																		sTabla,
-																		javax.swing.GroupLayout.PREFERRED_SIZE,
-																		452,
-																		javax.swing.GroupLayout.PREFERRED_SIZE))
-												.addGroup(
-														layout.createSequentialGroup()
-																.addGap(192,
-																		192,
-																		192)
-																.addComponent(
-																		lOK))
-												.addGroup(
-														layout.createSequentialGroup()
-																.addGap(195,
-																		195,
-																		195)
-																.addComponent(
-																		lFinal)))
-								.addContainerGap(40, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-				layout.createSequentialGroup()
-						.addGap(22, 22, 22)
-						.addComponent(lOK)
-						.addGap(18, 18, 18)
-						.addComponent(sTabla,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 347,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(29, 29, 29)
-						.addComponent(lFinal)
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)));
-
-		pack();
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 	}
 
 	public String[][] listaSensores(ArrayList<String> l) {

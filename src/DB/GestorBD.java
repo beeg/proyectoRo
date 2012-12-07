@@ -285,13 +285,8 @@ public class GestorBD {
 		GestorBD g = GestorBD.getInstance();
 		g.conectar();
 		ArrayList<Medida> m = g.getMedidas(1);
-<<<<<<< HEAD
 		for(int i=0;i<m.size();i++)	{
 			System.out.println(m.get(i));
-=======
-		for (int i = 0; i < m.size(); i++) {
-			System.out.println(m.get(i).getDate());
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 		}
 		g.desconectar();
 		/*

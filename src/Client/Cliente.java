@@ -40,7 +40,6 @@ public class Cliente {
 	/**
 	 * Metodo para mandar el comando LISTSENSOR
 	 */
-<<<<<<< HEAD
 	public ArrayList<String> listSensor() throws IOException{
 		ArrayList<String>listaMensajes=new ArrayList<String>();
 		sm.Escribir("LISTSENSOR" + '\n');
@@ -48,18 +47,10 @@ public class Cliente {
 		listaMensajes.add(mensajeLeido);
 		while (!mensajeLeido.contains("212")) {
 			mensajeLeido = sm.Leer();
-=======
-	public ArrayList<String> listSensor() {
-		ArrayList<String> listaMensajes = new ArrayList<String>();
-		try {
-			sm.Escribir("LISTSENSOR" + '\n');
-			String mensajeLeido = sm.Leer();
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 			listaMensajes.add(mensajeLeido);
 		}
 		return listaMensajes;
 	}
-<<<<<<< HEAD
 	
 	public String getValAct(String id_sensor) throws IOException{
 		System.out.println("CLIENTE VALACT");
@@ -67,18 +58,6 @@ public class Cliente {
 		sm.Escribir("GET_VALACT " + id_sensor + '\n');	
 		System.out.println("FIN ESCRIBIR CLIENTE VALACT");
 		mensajeLeido = sm.Leer();
-		System.out.println("Valact leidooooooo");
-=======
-
-	public String getValAct(String id_sensor) {
-		String mensajeLeido = "";
-		try {
-			sm.Escribir("GET_VALACT" + id_sensor + '\n');
-			mensajeLeido = sm.Leer();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 		return mensajeLeido;
 	}
 
@@ -89,7 +68,6 @@ public class Cliente {
 	 */
 	public ArrayList<String> historico(String idSensor) throws IOException{
 		ArrayList<String> medidas = new ArrayList<String>();
-<<<<<<< HEAD
 		sm.Escribir("HISTORICO " + idSensor + '\n');
 		String primerMensaje = sm.Leer();
 		medidas.add(primerMensaje);
@@ -100,23 +78,10 @@ public class Cliente {
 				medidas.add(mensajeLeido);
 				System.out.println(mensajeLeido);
 				mensajeLeido = sm.Leer();
-=======
-		try {
-			sm.Escribir("HISTORICO " + idSensor + '\n');
-			String primerMensaje = sm.Leer();
-			medidas.add(primerMensaje);
-			System.out.println(primerMensaje);
-			if (primerMensaje.contains("113")) {
-				String mensajeLeido = sm.Leer();
-				while (!mensajeLeido.contains("212")) {
-					medidas.add(mensajeLeido);
-					System.out.println(mensajeLeido);
-					mensajeLeido = sm.Leer();
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 				}
 				System.out.println(mensajeLeido);
 				medidas.add(mensajeLeido);
-			}
+		}
 		return medidas;
 	}
 
@@ -125,23 +90,11 @@ public class Cliente {
 	 * 
 	 * @param idSensor
 	 */
-<<<<<<< HEAD
 	public String onSensor(String idSensor) throws IOException{
 		String primerMensaje="";
 		sm.Escribir("ON " + idSensor + '\n');
 		primerMensaje = sm.Leer();
 		System.out.println(primerMensaje);
-=======
-	public String onSensor(String idSensor) {
-		String primerMensaje = "";
-		try {
-			sm.Escribir("ON " + idSensor + '\n');
-			primerMensaje = sm.Leer();
-			System.out.println(primerMensaje);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
 		return primerMensaje;
 	}
 
@@ -150,7 +103,6 @@ public class Cliente {
 	 * 
 	 * @param idSensor
 	 */
-<<<<<<< HEAD
 	public String offSensor(String idSensor) throws IOException{
 		String primerMensaje ="";
 		sm.Escribir("OFF " + idSensor + '\n');
@@ -171,38 +123,7 @@ public class Cliente {
 		String resultado="";
 		sm.Escribir("OFFGPS \n");
 		resultado=sm.Leer();
-=======
-	public String offSensor(String idSensor) {
-		String primerMensaje = "";
-		try {
-			sm.Escribir("OFF " + idSensor + '\n');
-			primerMensaje = sm.Leer();
-			System.out.println(primerMensaje);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return primerMensaje;
-	}
-
-	public String ONGPS() {
-		String resultado = "";
-		try {
-			sm.Escribir("ONGPS\n");
-			resultado = sm.Leer();
-			System.out.println(resultado);
-		} catch (IOException e) {
-			System.out.println("Error en GPS en cliente");
-		}
-		return resultado;
-	}
-
-	public String OFFGPS() {
-		String resultado = "";
-		try {
-			sm.Escribir("OFFGPS \n");
-			resultado = sm.Leer();
->>>>>>> bc825ac91130065c78b42144ec27a133d6fc71b4
-			System.out.println(resultado);
+		System.out.println(resultado);
 		return resultado;
 	}
 
