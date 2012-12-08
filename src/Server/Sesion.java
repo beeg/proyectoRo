@@ -485,20 +485,43 @@ public class Sesion implements Runnable {
 					+ v.getGps().getLongitud() + "\n");
 			} else	{
 				System.out.println("get loc con gps off");
-				ServidorLocalizacion s = new ServidorLocalizacion();
-				s.activarServidor();
-				smLoc = new SocketManager("127.0.0.1", 5889);	
-				smLoc.Escribir("GET_COOR"+v.getIdCell()+'\n');
-				String coor=smLoc.Leer();
-				smLoc.Escribir("SALIR\n");
-				sM.Escribir(coor);
-				System.out.println("fin get loc");
+				smLoc = new SocketManager("127.0.0.1", 5889);
+				smLoc.Escribir("USER "+actualUser.getLogin()+"\n");
+				String mensajeLoc=smLoc.Leer();
+				System.out.println(mensajeLoc+"getloc");
+				if(mensajeLoc.contains("201")){
+					smLoc.Escribir("PASS "+actualUser.getPassword()+"\n");
+					mensajeLoc=smLoc.Leer();
+					System.out.println(mensajeLoc+"getloc");
+					if(mensajeLoc.contains("202")){
+						smLoc.Escribir("GET_COOR "+v.getIdCell()+'\n');
+						mensajeLoc=smLoc.Leer();
+						System.out.println(mensajeLoc+"getoloc");
+						sM.Escribir(mensajeLoc+"\n");
+						smLoc.Escribir("SALIR\n");
+						mensajeLoc=smLoc.Leer();
+						System.out.println(mensajeLoc);
+					}
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		terminarSesLocSocket();
+		System.out.println("fin get loc");
 		estado = 2;
 
+	}
+	
+	public void terminarSesLocSocket(){
+		try{
+		smLoc.CerrarStreams();
+		smLoc.CerrarSocket();
+		}catch(IOException e){
+			System.out.println("Error al cerrar el smLoc");
+		}
+		smLoc=null;
+		
 	}
 
 	/**

@@ -240,7 +240,11 @@ public class GestorBD {
 				int valor = rs.getInt("VALOR");
 				String hora = rs.getString("HORA");
 				String[] h = hora.split(":");
-				java.util.Date d = new java.util.Date(fecha.getYear()+1900,fecha.getMonth()+1,fecha.getDate(),Integer.parseInt(h[0]),Integer.parseInt(h[1]),Integer.parseInt(h[2]));
+				//java.util.Date d = new java.util.Date(fecha.getYear()+1900,fecha.getMonth()+1,fecha.getDate(),Integer.parseInt(h[0]),Integer.parseInt(h[1]),Integer.parseInt(h[2]));
+				java.util.Date d=new java.util.Date(fecha.getTime());
+				d.setHours(Integer.parseInt(h[0]));
+				d.setMinutes(Integer.parseInt(h[1]));
+				d.setSeconds(Integer.parseInt(h[2]));
 				lMedidas.add(new Medida(id, d, lat, longitud, valor));
 			}
 		} catch (SQLException e) {
@@ -326,10 +330,11 @@ public class GestorBD {
 			e.printStackTrace();
 		}
 		g.desconectar();
-		
-		 * GestorBD gestor = GestorBD.getInstance(); gestor.conectar();
-		 * gestor.setFechaMedida(1); gestor.desconectar();
-		 */
+		*/
+		 GestorBD gestor = GestorBD.getInstance(); gestor.conectar();
+		 // gestor.setFechaMedida(8,d8);
+		  gestor.desconectar();
+		 
 	}
 
 }
