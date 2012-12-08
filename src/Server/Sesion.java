@@ -1,8 +1,11 @@
 package Server;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import ServerLocalizacion.ServidorLocalizacion;
 import Util.SocketManager;
 
 import DB.GestorBD;
@@ -114,7 +117,7 @@ public class Sesion implements Runnable {
 			} else if (comando.equals("GET_VALACT")) {
 				tratarGetValact(parametro);
 			} else if (comando.equals("GET_FOTO")) {
-
+				tratarGetFoto();
 			}
 			break;
 		case 3:
@@ -453,13 +456,19 @@ public class Sesion implements Runnable {
 	public void tratarGetFoto() {
 		try {
 			if (v.getGps().isEstado()) {
-				sM.Escribir("206 OK lo que serían los bytes...\n");
+				GestorBD g = GestorBD.getInstance();
+				g.conectar();
+				String name="photos\\"+g.getFoto(v.getId());
+				g.desconectar();
+				FileInputStream f = new FileInputStream(name);
+				sM.Escribir("206 OK "+f.available()+ " bytes transmitiendo\n");
+				sM.EscribirBytes(f);
+				f.close();
 				estado = 3;
 			} else {
 				sM.Escribir("420 ERR GPS en estado OFF\n");
-
 			}
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -469,8 +478,14 @@ public class Sesion implements Runnable {
 	 */
 	public void tratarGetLoc() {
 		try {
+			if(v.getGps().isEstado())	{
 			sM.Escribir("114 OK " + v.getGps().getLatitud() + "-"
 					+ v.getGps().getLongitud() + "\n");
+			} else	{
+				ServidorLocalizacion s = new ServidorLocalizacion();
+				s.activarServidor();
+				
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

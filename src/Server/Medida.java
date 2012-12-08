@@ -62,33 +62,12 @@ public class Medida {
 	}
 
 	public String toString() {
-		String dia = (new Integer(date.getDate())).toString();
-		System.out.println(dia);
-		String mes = (new Integer(date.getMonth() + 1)).toString();
-		System.out.println(mes);
-		String anyo = (new Integer(date.getYear() + 1900)).toString();
-		System.out.println(anyo);
-		return dia + "/" + mes + "/" + anyo + ";" + "hora"/*
-														 * (new
-														 * Integer(date.getHours
-														 * ())).toString()+ ":"
-														 * + (new
-														 * Integer(date.getMinutes
-														 * ())).toString() + ":"
-														 * +(new
-														 * Integer(date.getSeconds
-														 * ())).toString()
-														 */+ ";" + latitud
-				+ "-" + longitud + ";" + valor;
+		return date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900)+";"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+";"+latitud+"-"+longitud+";"+valor;
 	}
 
 	public static void main(String[] args) {
-		Date date = new Date();
-		GestorBD g = GestorBD.getInstance();
-		g.conectar();
-		ArrayList<Medida> m = g.getMedidas(1);
-		g.desconectar();
-		System.out.println(m.get(0).getDate());
+		/*Medida m = new Medida(1,new Date(),"lat","long",90);
+		System.out.println(m.toString());*/
 	}
 
 }

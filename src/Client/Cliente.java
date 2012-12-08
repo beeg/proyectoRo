@@ -3,6 +3,8 @@ package Client;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 import Util.SocketManager;
 
 public class Cliente {
@@ -53,10 +55,8 @@ public class Cliente {
 	}
 	
 	public String getValAct(String id_sensor) throws IOException{
-		System.out.println("CLIENTE VALACT");
 		String mensajeLeido="";		
 		sm.Escribir("GET_VALACT " + id_sensor + '\n');	
-		System.out.println("FIN ESCRIBIR CLIENTE VALACT");
 		mensajeLeido = sm.Leer();
 		return mensajeLeido;
 	}
@@ -121,14 +121,39 @@ public class Cliente {
 	
 	public String OFFGPS() throws IOException{
 		String resultado="";
-		sm.Escribir("OFFGPS \n");
+		sm.Escribir("OFFGPS\n");
 		resultado=sm.Leer();
 		System.out.println(resultado);
 		return resultado;
 	}
+	
+	public ImageIcon getFoto() throws IOException{
+		System.out.println("cliente get foto inicio");
+		ImageIcon img=null;
+		String mensajeLeido="";		
+		sm.Escribir("GET_FOTO\n");	
+		mensajeLeido = sm.Leer();
+		if(mensajeLeido.contains("206"))	{
+			byte[] buffer;
+			buffer = sm.LeerBytes();
+			img = new ImageIcon(buffer);
+		}
+		System.out.println("cliente get foto fin");
+		return img;
+	}
+	
+	public String getLoc() throws IOException{
+		String resultado="";
+		String mensajeLeido="";		
+		sm.Escribir("GET_LOC\n");	
+		mensajeLeido = sm.Leer();
+		if(mensajeLeido.contains("206"))	{
+		}
+		return resultado;
+	}
 
 	public void SALIR() throws IOException {
-		sm.Escribir("SALIR \n");
+		sm.Escribir("SALIR\n");
 		mensajeServer = sm.Leer();
 		if (mensajeServer.contains("208")) {
 			sm.CerrarStreams();

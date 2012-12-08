@@ -130,11 +130,12 @@ public class GestorBD {
 		smt.executeUpdate();
 	}
 
-	public void insertarVehiculo(int idGps, int idCelda) throws SQLException {
+	public void insertarVehiculo(int idGps, int idCelda, String foto) throws SQLException {
 		PreparedStatement smt;
-		smt = conexion.prepareStatement("insert into VEHICULO values(?,?)");
+		smt = conexion.prepareStatement("insert into VEHICULO(ID_GPS,ID_CELDA,FOTO) values(?,?,?)");
 		smt.setInt(1, idGps);
 		smt.setInt(2, idCelda);
+		smt.setString(3, foto);
 		smt.executeUpdate();
 	}
 
@@ -152,11 +153,19 @@ public class GestorBD {
 		ResultSet rs = smt.executeQuery();
 		return new Vehiculo(id, getGPS(rs.getInt(2)), rs.getInt(3), 5888);
 	}
+	
+	public String getFoto(int id) throws SQLException {
+		PreparedStatement smt;
+		smt = conexion.prepareStatement("SELECT * FROM VEHICULO where ID=?");
+		smt.setInt(1, id);
+		ResultSet rs = smt.executeQuery();
+		return rs.getString(4);
+	}
 
 	public void insertarSensor(String desc, boolean estado, int idVehiculo)
 			throws SQLException {
 		PreparedStatement smt;
-		smt = conexion.prepareStatement("insert into SENSOR values(?,?,?)");
+		smt = conexion.prepareStatement("insert into SENSOR(DESC,ESTADO,ID_VEHICULO) values(?,?,?)");
 		smt.setString(1, desc);
 		smt.setBoolean(2, estado);
 		smt.setInt(3, idVehiculo);
@@ -199,6 +208,22 @@ public class GestorBD {
 		return listaSensores;
 	}
 
+	public void insertarMedida(int id,java.util.Date fecha, String log, String lat,int valor, int idSensor) 
+			throws SQLException {
+		java.sql.Date d = new java.sql.Date(fecha.getYear()+1900, fecha.getMonth()+1, fecha.getDate());
+		String hora=fecha.getHours()+":"+fecha.getMinutes()+":"+fecha.getSeconds();
+		PreparedStatement smt;
+		smt = conexion.prepareStatement("insert into MEDIDA(FECHA,LONGITUD,LATITUD,VALOR,ID_SENSOR,HORA) values(?,?,?,?,?,?,?)");
+		smt.setInt(1, id);
+		smt.setDate(2, d);
+		smt.setString(3, log);
+		smt.setString(4, lat);
+		smt.setInt(5, valor);
+		smt.setInt(6, idSensor);
+		smt.setString(7, hora);
+		smt.executeUpdate();
+	}
+	
 	public ArrayList<Medida> getMedidas(int idSensor) {
 		ArrayList<Medida> lMedidas = new ArrayList<Medida>();
 		PreparedStatement smt;
@@ -209,11 +234,14 @@ public class GestorBD {
 			ResultSet rs = smt.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt("ID");
-				Date fecha = rs.getDate("FECHA");
+				java.sql.Date fecha = rs.getDate("FECHA");
 				String longitud = rs.getString("LONGITUD");
 				String lat = rs.getString("LATITUD");
 				int valor = rs.getInt("VALOR");
-				lMedidas.add(new Medida(id, fecha, lat, longitud, valor));
+				String hora = rs.getString("HORA");
+				String[] h = hora.split(":");
+				java.util.Date d = new java.util.Date(fecha.getYear()+1900,fecha.getMonth()+1,fecha.getDate(),Integer.parseInt(h[0]),Integer.parseInt(h[1]),Integer.parseInt(h[2]));
+				lMedidas.add(new Medida(id, d, lat, longitud, valor));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -282,14 +310,23 @@ public class GestorBD {
 	}
 
 	public static void main(String[] args) {
-		GestorBD g = GestorBD.getInstance();
+		/*GestorBD g = GestorBD.getInstance();
 		g.conectar();
-		ArrayList<Medida> m = g.getMedidas(1);
-		for(int i=0;i<m.size();i++)	{
-			System.out.println(m.get(i));
+		try {
+			g.insertarMedida(1,new Date(1900+2012,5+1,3), "74º02'46.86'", "4º41'24.14''", 80, 1);
+			g.insertarMedida(2,new Date(1900+2010,1+1,29), "93º11'42.99'", "29º14'78.01''", 13, 1);
+			g.insertarMedida(3,new Date(1900+2012,8+1,17), "13º56'16.95'", "76º51'34.82''", 26, 1);
+			g.insertarMedida(4,new Date(1900+2012,3+1,14), "2º45'87.36'", "13º5'68.51''", 54, 1);
+			g.insertarMedida(5,new Date(1900+2012,5+1,3), "74º02'46.86'", "4º41'24.14''", 80, 2);
+			g.insertarMedida(6,new Date(1900+2010,1+1,29), "93º11'42.99'", "29º14'78.01''", 13, 2);
+			g.insertarMedida(7,new Date(1900+2012,8+1,17), "13º56'16.95'", "76º51'34.82''", 26, 2);
+			g.insertarMedida(8,new Date(1900+2012,3+1,14), "2º45'87.36'", "13º5'68.51''", 54, 2);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		g.desconectar();
-		/*
+		
 		 * GestorBD gestor = GestorBD.getInstance(); gestor.conectar();
 		 * gestor.setFechaMedida(1); gestor.desconectar();
 		 */

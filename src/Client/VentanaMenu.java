@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class VentanaMenu extends JFrame implements ActionListener {
@@ -324,7 +325,19 @@ public class VentanaMenu extends JFrame implements ActionListener {
 				lMensaje.setForeground(new Color(255,0,0));
 			}
 		}else if(o==bFoto){
-			
+			try {
+				ImageIcon i = c.getFoto();
+				if(i==null)	{
+					lMensaje.setText("420 ERR GPS en estado OFF.");
+					lMensaje.setForeground(new Color(255,0,0));
+				} else	{
+					VentanaFoto v = new VentanaFoto(i);
+					v.setVisible(true);
+				}
+			} catch (IOException e) {
+				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
+				lMensaje.setForeground(new Color(255,0,0));
+			}
 		}else if(o==bOnGps)	{
 			try	{
 			String resultado=c.ONGPS();

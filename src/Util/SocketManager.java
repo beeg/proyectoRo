@@ -76,4 +76,20 @@ public class SocketManager {
 	public void Escribir(byte[] buffer, int bytes) throws IOException {
 		bufferEscritura.write(buffer, 0, bytes);
 	}
+	
+	public void EscribirBytes(FileInputStream f) throws IOException {
+    	bufferEscritura.writeInt(f.available());
+    	byte[] buffer = new byte[1024];
+        int bytes = 0;        
+        while((bytes = f.read(buffer)) >= 0){
+        	Escribir(buffer, bytes);
+        }
+    }    
+    
+    public byte[] LeerBytes() throws IOException{
+    	 DataInputStream data = new DataInputStream(mySocket.getInputStream());
+    	 byte[] buffer = new byte[data.readInt()];
+    	 data.readFully(buffer);
+    	 return buffer;
+    }
 }

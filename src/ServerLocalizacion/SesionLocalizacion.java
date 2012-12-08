@@ -153,6 +153,7 @@ public class SesionLocalizacion implements Runnable {
 				gestor.conectar();
 				try {
 					Celda c = gestor.getCelda(Integer.parseInt(parametro));
+					gestor.desconectar();
 					mensajeEnviar = "114 OK " + c.toString() + "\n";
 				} catch (NumberFormatException | SQLException e) {
 					mensajeEnviar = "417 ERR Celda desconocida\n";
