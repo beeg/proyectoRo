@@ -331,7 +331,7 @@ public class VentanaMenu extends JFrame implements ActionListener {
 					lMensaje.setText("420 ERR GPS en estado OFF.");
 					lMensaje.setForeground(new Color(255,0,0));
 				} else	{
-					VentanaFoto v = new VentanaFoto(c,i);
+					VentanaFoto v = new VentanaFoto(c,this,i);
 					v.setVisible(true);
 				}
 			} catch (IOException e) {

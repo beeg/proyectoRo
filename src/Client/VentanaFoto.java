@@ -16,9 +16,12 @@ public class VentanaFoto extends JFrame implements ActionListener{
 	private javax.swing.JButton bGetLoc;
 	private javax.swing.JPanel pFoto;
 	private Cliente c;
+	private VentanaMenu vMenu;
 	
-	public VentanaFoto(final Cliente c,ImageIcon i)	{
+	public VentanaFoto(final Cliente c,VentanaMenu vMenu, ImageIcon i)	{
 		this.c=c;
+		this.vMenu=vMenu;
+		this.vMenu.disable();
 	    lMensaje = new javax.swing.JLabel();
 	    bGetLoc = new javax.swing.JButton();
 	    pFoto = new javax.swing.JPanel();
@@ -81,6 +84,8 @@ public class VentanaFoto extends JFrame implements ActionListener{
 		Object o = arg0.getSource();
 		if(o==bGetLoc){
 			try {
+				bGetLoc.disable();
+				vMenu.enable();
 				String mensaje=c.getLoc();
 				lMensaje.setText(mensaje);
 				if(mensaje.contains("114"))	{
