@@ -81,7 +81,7 @@ public class SocketManager {
     	bufferEscritura.writeInt(f.available());
     	byte[] buffer = new byte[1024];
         int bytes = 0;        
-        while((bytes = f.read(buffer)) >= 0){
+        while((bytes = f.read(buffer)) != -1){
         	Escribir(buffer, bytes);
         }
     }    

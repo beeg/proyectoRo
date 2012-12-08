@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import ServerLocalizacion.ServidorLocalizacion;
 import Util.SocketManager;
 
+import Client.Cliente;
 import DB.GestorBD;
 
 public class Sesion implements Runnable {
@@ -123,7 +124,7 @@ public class Sesion implements Runnable {
 			break;
 		case 3:
 			if (comando.equals("GET_LOC")) {
-
+				tratarGetLoc();
 			}
 			break;
 
@@ -456,7 +457,7 @@ public class Sesion implements Runnable {
 	 */
 	public void tratarGetFoto() {
 		try {
-			if (v.getGps().isEstado()) {
+			//if (v.getGps().isEstado()) {
 				GestorBD g = GestorBD.getInstance();
 				g.conectar();
 				String name="photos\\"+g.getFoto(v.getId());
@@ -466,9 +467,9 @@ public class Sesion implements Runnable {
 				sM.EscribirBytes(f);
 				f.close();
 				estado = 3;
-			} else {
-				sM.Escribir("420 ERR GPS en estado OFF\n");
-			}
+			//} else {
+				//sM.Escribir("420 ERR GPS en estado OFF\n");
+			//}
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -483,13 +484,15 @@ public class Sesion implements Runnable {
 			sM.Escribir("114 OK " + v.getGps().getLatitud() + "-"
 					+ v.getGps().getLongitud() + "\n");
 			} else	{
-				smLoc = new SocketManager("127.0.0.1", 5889);
+				System.out.println("get loc con gps off");
 				ServidorLocalizacion s = new ServidorLocalizacion();
-				s.activarServidor();
+				smLoc = new SocketManager("127.0.0.1", 5889);	
+				s.activarServidor();							
 				smLoc.Escribir("GET_COOR"+v.getIdCell()+'\n');
 				String coor=smLoc.Leer();
 				smLoc.Escribir("SALIR\n");
 				sM.Escribir(coor);
+				System.out.println("fin get loc");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

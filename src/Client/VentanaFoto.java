@@ -23,7 +23,7 @@ public class VentanaFoto extends JFrame implements ActionListener{
 	    bGetLoc = new javax.swing.JButton();
 	    pFoto = new javax.swing.JPanel();
 	    lImagen = new javax.swing.JLabel(i);
-	    lMensaje.setText("jLabel1");
+	    lMensaje.setText("");
 	    bGetLoc.setText("Obtener Localizacion");
 
 	        javax.swing.GroupLayout pFotoLayout = new javax.swing.GroupLayout(pFoto);
@@ -67,6 +67,8 @@ public class VentanaFoto extends JFrame implements ActionListener{
 	                        .addGap(24, 24, 24))))
 	        );
 
+	        bGetLoc.addActionListener(this);
+	        
 	        pack();
 	}
 	
