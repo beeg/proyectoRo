@@ -21,6 +21,9 @@ public class SesionLocalizacion implements Runnable {
 		actualUser = new Usuario("Desconocido", "");
 		estado = 0;
 		this.server = server;
+		terminar=false;
+		mensajeCliente="";
+		mensajeEnviar="";
 	}
 
 	@Override
@@ -96,12 +99,11 @@ public class SesionLocalizacion implements Runnable {
 	 */
 	public void tratarUser(String parametro) {
 		@SuppressWarnings("unused")
-		Usuario u;
 		boolean encontrado = false;
 		GestorBD gestor = GestorBD.getInstance();
 		gestor.conectar();
 		try {
-			u = gestor.getUsuario(parametro);
+			actualUser = gestor.getUsuario(parametro);
 			encontrado = true;
 		} catch (SQLException e1) {
 			System.out.println("Usuario no encontrado");
@@ -117,6 +119,7 @@ public class SesionLocalizacion implements Runnable {
 		} catch (IOException e) {
 			System.out.println("Error al devolver USER");
 		}
+		gestor.desconectar();
 	}
 
 	/**
@@ -134,6 +137,8 @@ public class SesionLocalizacion implements Runnable {
 			mensajeEnviar = "403 ERR Falta la clave \n";
 			actualUser = null;
 		} else {
+			System.out.println(actualUser.getPassword());
+			System.out.println(parametro);
 			mensajeEnviar = "402 OK La clave es incorrecta \n";
 			actualUser = null;
 		}
@@ -145,6 +150,7 @@ public class SesionLocalizacion implements Runnable {
 	}
 
 	public void tratarGetCorr(String parametro) {
+		System.out.println("paso por aquí?");
 		try {
 			if (parametro.equals("")) {
 				mensajeEnviar = "418 ERR Falta parámetro cell_id\n";

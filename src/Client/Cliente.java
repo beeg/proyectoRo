@@ -144,6 +144,7 @@ public class Cliente {
 		String mensajeLeido="";		
 		sm.Escribir("GET_LOC\n");	
 		mensajeLeido = sm.Leer();
+		System.out.println(mensajeLeido);
 		return mensajeLeido;
 	}
 
