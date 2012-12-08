@@ -486,8 +486,8 @@ public class Sesion implements Runnable {
 			} else	{
 				System.out.println("get loc con gps off");
 				ServidorLocalizacion s = new ServidorLocalizacion();
+				s.activarServidor();
 				smLoc = new SocketManager("127.0.0.1", 5889);	
-				s.activarServidor();							
 				smLoc.Escribir("GET_COOR"+v.getIdCell()+'\n');
 				String coor=smLoc.Leer();
 				smLoc.Escribir("SALIR\n");
