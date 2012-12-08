@@ -20,6 +20,7 @@ public class Sesion implements Runnable {
 	private ArrayList<Usuario> lUsuarios;
 	private ArrayList<Sensor> lSensores;
 	private boolean terminar;
+	private SocketManager smLoc;
 
 	/**
 	 * Constructor de una sesion, con el servidor al que pertenece (el vehiculo)
@@ -482,9 +483,13 @@ public class Sesion implements Runnable {
 			sM.Escribir("114 OK " + v.getGps().getLatitud() + "-"
 					+ v.getGps().getLongitud() + "\n");
 			} else	{
+				smLoc = new SocketManager("127.0.0.1", 5889);
 				ServidorLocalizacion s = new ServidorLocalizacion();
 				s.activarServidor();
-				
+				smLoc.Escribir("GET_COOR"+v.getIdCell()+'\n');
+				String coor=smLoc.Leer();
+				smLoc.Escribir("SALIR\n");
+				sM.Escribir(coor);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

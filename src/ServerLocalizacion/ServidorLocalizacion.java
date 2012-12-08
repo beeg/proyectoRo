@@ -26,7 +26,7 @@ public class ServidorLocalizacion {
 				SesionLocalizacion s = new SesionLocalizacion(sm, this);
 				lSesiones.add(s);
 				new Thread(s).start();
-			}
+			}  
 		} catch (IOException e) {
 			System.out.println("Error en el servidor de localización");
 		}

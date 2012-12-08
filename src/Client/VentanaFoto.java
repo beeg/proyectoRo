@@ -1,7 +1,9 @@
 package Client;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,15 +15,16 @@ public class VentanaFoto extends JFrame implements ActionListener{
 	private javax.swing.JLabel lImagen;
 	private javax.swing.JButton bGetLoc;
 	private javax.swing.JPanel pFoto;
+	private Cliente c;
 	
-	public VentanaFoto(ImageIcon i)	{
-	     lMensaje = new javax.swing.JLabel();
-	     bGetLoc = new javax.swing.JButton();
-	     pFoto = new javax.swing.JPanel();
-	     lImagen = new javax.swing.JLabel(i);
-
-	     lMensaje.setText("jLabel1");
-	     bGetLoc.setText("Obtener Localizacion");
+	public VentanaFoto(final Cliente c,ImageIcon i)	{
+		this.c=c;
+	    lMensaje = new javax.swing.JLabel();
+	    bGetLoc = new javax.swing.JButton();
+	    pFoto = new javax.swing.JPanel();
+	    lImagen = new javax.swing.JLabel(i);
+	    lMensaje.setText("jLabel1");
+	    bGetLoc.setText("Obtener Localizacion");
 
 	        javax.swing.GroupLayout pFotoLayout = new javax.swing.GroupLayout(pFoto);
 	        pFoto.setLayout(pFotoLayout);
@@ -75,7 +78,18 @@ public class VentanaFoto extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		Object o = arg0.getSource();
 		if(o==bGetLoc){
-			
+			try {
+				String mensaje=c.getLoc();
+				lMensaje.setText(mensaje);
+				if(mensaje.contains("114"))	{
+					lMensaje.setForeground(new Color(50,205,50));
+				} else if(mensaje.contains("417") || mensaje.contains("418"))	{
+					lMensaje.setForeground(new Color(255,0,0));
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}		
 	}
 }

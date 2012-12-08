@@ -128,7 +128,6 @@ public class Cliente {
 	}
 	
 	public ImageIcon getFoto() throws IOException{
-		System.out.println("cliente get foto inicio");
 		ImageIcon img=null;
 		String mensajeLeido="";		
 		sm.Escribir("GET_FOTO\n");	
@@ -138,18 +137,14 @@ public class Cliente {
 			buffer = sm.LeerBytes();
 			img = new ImageIcon(buffer);
 		}
-		System.out.println("cliente get foto fin");
 		return img;
 	}
 	
 	public String getLoc() throws IOException{
-		String resultado="";
 		String mensajeLeido="";		
 		sm.Escribir("GET_LOC\n");	
 		mensajeLeido = sm.Leer();
-		if(mensajeLeido.contains("206"))	{
-		}
-		return resultado;
+		return mensajeLeido;
 	}
 
 	public void SALIR() throws IOException {
