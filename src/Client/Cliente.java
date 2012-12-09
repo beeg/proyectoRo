@@ -42,8 +42,8 @@ public class Cliente {
 	/**
 	 * Metodo para mandar el comando LISTSENSOR
 	 */
-	public ArrayList<String> listSensor() throws IOException{
-		ArrayList<String>listaMensajes=new ArrayList<String>();
+	public ArrayList<String> listSensor() throws IOException {
+		ArrayList<String> listaMensajes = new ArrayList<String>();
 		sm.Escribir("LISTSENSOR" + '\n');
 		String mensajeLeido = sm.Leer();
 		listaMensajes.add(mensajeLeido);
@@ -53,10 +53,10 @@ public class Cliente {
 		}
 		return listaMensajes;
 	}
-	
-	public String getValAct(String id_sensor) throws IOException{
-		String mensajeLeido="";		
-		sm.Escribir("GET_VALACT " + id_sensor + '\n');	
+
+	public String getValAct(String id_sensor) throws IOException {
+		String mensajeLeido = "";
+		sm.Escribir("GET_VALACT " + id_sensor + '\n');
 		mensajeLeido = sm.Leer();
 		return mensajeLeido;
 	}
@@ -66,21 +66,21 @@ public class Cliente {
 	 * 
 	 * @param idSensor
 	 */
-	public ArrayList<String> historico(String idSensor) throws IOException{
+	public ArrayList<String> historico(String idSensor) throws IOException {
 		ArrayList<String> medidas = new ArrayList<String>();
 		sm.Escribir("HISTORICO " + idSensor + '\n');
 		String primerMensaje = sm.Leer();
 		medidas.add(primerMensaje);
 		System.out.println(primerMensaje);
 		if (primerMensaje.contains("113")) {
-			String mensajeLeido = sm.Leer();				
+			String mensajeLeido = sm.Leer();
 			while (!mensajeLeido.contains("212")) {
 				medidas.add(mensajeLeido);
 				System.out.println(mensajeLeido);
 				mensajeLeido = sm.Leer();
-				}
-				System.out.println(mensajeLeido);
-				medidas.add(mensajeLeido);
+			}
+			System.out.println(mensajeLeido);
+			medidas.add(mensajeLeido);
 		}
 		return medidas;
 	}
@@ -90,8 +90,8 @@ public class Cliente {
 	 * 
 	 * @param idSensor
 	 */
-	public String onSensor(String idSensor) throws IOException{
-		String primerMensaje="";
+	public String onSensor(String idSensor) throws IOException {
+		String primerMensaje = "";
 		sm.Escribir("ON " + idSensor + '\n');
 		primerMensaje = sm.Leer();
 		System.out.println(primerMensaje);
@@ -103,46 +103,46 @@ public class Cliente {
 	 * 
 	 * @param idSensor
 	 */
-	public String offSensor(String idSensor) throws IOException{
-		String primerMensaje ="";
+	public String offSensor(String idSensor) throws IOException {
+		String primerMensaje = "";
 		sm.Escribir("OFF " + idSensor + '\n');
 		primerMensaje = sm.Leer();
 		System.out.println(primerMensaje);
 		return primerMensaje;
 	}
-	
-	public String ONGPS() throws IOException{
-		String resultado="";
+
+	public String ONGPS() throws IOException {
+		String resultado = "";
 		sm.Escribir("ONGPS\n");
-		resultado=sm.Leer();
+		resultado = sm.Leer();
 		System.out.println(resultado);
 		return resultado;
 	}
-	
-	public String OFFGPS() throws IOException{
-		String resultado="";
+
+	public String OFFGPS() throws IOException {
+		String resultado = "";
 		sm.Escribir("OFFGPS\n");
-		resultado=sm.Leer();
+		resultado = sm.Leer();
 		System.out.println(resultado);
 		return resultado;
 	}
-	
-	public ImageIcon getFoto() throws IOException{
-		ImageIcon img=null;
-		String mensajeLeido="";		
-		sm.Escribir("GET_FOTO\n");	
+
+	public ImageIcon getFoto() throws IOException {
+		ImageIcon img = null;
+		String mensajeLeido = "";
+		sm.Escribir("GET_FOTO\n");
 		mensajeLeido = sm.Leer();
-		if(mensajeLeido.contains("206"))	{
+		if (mensajeLeido.contains("206")) {
 			byte[] buffer;
 			buffer = sm.LeerBytes();
 			img = new ImageIcon(buffer);
 		}
 		return img;
 	}
-	
-	public String getLoc() throws IOException{
-		String mensajeLeido="";		
-		sm.Escribir("GET_LOC\n");	
+
+	public String getLoc() throws IOException {
+		String mensajeLeido = "";
+		sm.Escribir("GET_LOC\n");
 		mensajeLeido = sm.Leer();
 		System.out.println(mensajeLeido);
 		return mensajeLeido;

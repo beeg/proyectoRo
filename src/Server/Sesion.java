@@ -174,10 +174,8 @@ public class Sesion implements Runnable {
 			estado = 2;
 		} else if (parametro.equals("")) {
 			mensajeEnviar = "403 ERR Falta la clave \n";
-			actualUser = null;
 		} else {
 			mensajeEnviar = "402 OK La clave es incorrecta \n";
-			actualUser = null;
 		}
 		try {
 			sM.Escribir(mensajeEnviar);
@@ -320,9 +318,9 @@ public class Sesion implements Runnable {
 				mensajeEnviar = "417 ERR Sensor no existe.\n";
 				sM.Escribir(mensajeEnviar);
 			}
-			
-			if(encontrado)	{
-				if(!s.isEstado())	{ //OFF
+
+			if (encontrado) {
+				if (!s.isEstado()) { // OFF
 					mensajeEnviar = "419 ERR Sensor en estado OFF.\n";
 					sM.Escribir(mensajeEnviar);
 				} else { // OFF
@@ -413,7 +411,6 @@ public class Sesion implements Runnable {
 					int idSensor = Integer.parseInt(parametro);
 					boolean encontrado = false;
 					Sensor sensor = null;
-					System.out.println(lSensores);
 					for (int i = 0; i < lSensores.size() && !encontrado; i++) {
 						sensor = lSensores.get(i);
 						if (sensor.getId() == idSensor) {
@@ -421,22 +418,18 @@ public class Sesion implements Runnable {
 						}
 					}
 					if (encontrado) {
-						if(sensor.isEstado()){
+						if (sensor.isEstado()) {
 							GestorBD g = GestorBD.getInstance();
 							g.conectar();
-							Medida m = g.getMedidas(1).get(0);
+							Medida m = g.getMedidas(idSensor).get(0);
 							g.desconectar();
-							mensajeEnviar="114 OK "+m.toString()+"\n";
-							System.out.println("Mensaje enviar: "+mensajeEnviar);
-							System.out.println("antes de escribir mensaje");
+							mensajeEnviar = "114 OK " + m.toString() + "\n";
 							sM.Escribir(mensajeEnviar);
-							System.out.println("despues de escribir mensaje");
-						}else{
-							mensajeEnviar="416 Sensor en OFF\n";
+						} else {
+							mensajeEnviar = "416 Sensor en OFF\n";
 							sM.Escribir(mensajeEnviar);
 						}
 					} else {
-						System.out.println("no encontrado");
 						mensajeEnviar = "414 ERR Sensor desconocido\n";
 						sM.Escribir(mensajeEnviar);
 					}
@@ -457,19 +450,19 @@ public class Sesion implements Runnable {
 	 */
 	public void tratarGetFoto() {
 		try {
-			//if (v.getGps().isEstado()) {
-				GestorBD g = GestorBD.getInstance();
-				g.conectar();
-				String name="photos\\"+g.getFoto(v.getId());
-				g.desconectar();
-				FileInputStream f = new FileInputStream(name);
-				sM.Escribir("206 OK "+f.available()+ " bytes transmitiendo\n");
-				sM.EscribirBytes(f);
-				f.close();
-				estado = 3;
-			//} else {
-				//sM.Escribir("420 ERR GPS en estado OFF\n");
-			//}
+			// if (v.getGps().isEstado()) {
+			GestorBD g = GestorBD.getInstance();
+			g.conectar();
+			String name = "photos\\" + g.getFoto(v.getId());
+			g.desconectar();
+			FileInputStream f = new FileInputStream(name);
+			sM.Escribir("206 OK " + f.available() + " bytes transmitiendo\n");
+			sM.EscribirBytes(f);
+			f.close();
+			estado = 3;
+			// } else {
+			// sM.Escribir("420 ERR GPS en estado OFF\n");
+			// }
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -480,48 +473,48 @@ public class Sesion implements Runnable {
 	 */
 	public void tratarGetLoc() {
 		try {
-			if(v.getGps().isEstado())	{
-			sM.Escribir("114 OK " + v.getGps().getLatitud() + "-"
-					+ v.getGps().getLongitud() + "\n");
-			} else	{
+			if (v.getGps().isEstado()) {
+				sM.Escribir("114 OK " + v.getGps().getLatitud() + "-"
+						+ v.getGps().getLongitud() + "\n");
+			} else {
 				System.out.println("get loc con gps off");
 				smLoc = new SocketManager("127.0.0.1", 5889);
-				smLoc.Escribir("USER "+actualUser.getLogin()+"\n");
-				String mensajeLoc=smLoc.Leer();
-				System.out.println(mensajeLoc+"getloc");
-				if(mensajeLoc.contains("201")){
-					smLoc.Escribir("PASS "+actualUser.getPassword()+"\n");
-					mensajeLoc=smLoc.Leer();
-					System.out.println(mensajeLoc+"getloc");
-					if(mensajeLoc.contains("202")){
-						smLoc.Escribir("GET_COOR "+v.getIdCell()+'\n');
-						mensajeLoc=smLoc.Leer();
-						System.out.println(mensajeLoc+"getoloc");
-						sM.Escribir(mensajeLoc+"\n");
+				smLoc.Escribir("USER " + actualUser.getLogin() + "\n");
+				String mensajeLoc = smLoc.Leer();
+				System.out.println(mensajeLoc + "getloc");
+				if (mensajeLoc.contains("201")) {
+					smLoc.Escribir("PASS " + actualUser.getPassword() + "\n");
+					mensajeLoc = smLoc.Leer();
+					System.out.println(mensajeLoc + "getloc");
+					if (mensajeLoc.contains("202")) {
+						smLoc.Escribir("GET_COOR " + v.getIdCell() + '\n');
+						mensajeLoc = smLoc.Leer();
+						System.out.println(mensajeLoc + "getoloc");
+						sM.Escribir(mensajeLoc + "\n");
 						smLoc.Escribir("SALIR\n");
-						mensajeLoc=smLoc.Leer();
+						mensajeLoc = smLoc.Leer();
 						System.out.println(mensajeLoc);
+						terminarSesLocSocket();
 					}
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		terminarSesLocSocket();
 		System.out.println("fin get loc");
 		estado = 2;
 
 	}
-	
-	public void terminarSesLocSocket(){
-		try{
-		smLoc.CerrarStreams();
-		smLoc.CerrarSocket();
-		}catch(IOException e){
+
+	public void terminarSesLocSocket() {
+		try {
+			smLoc.CerrarStreams();
+			smLoc.CerrarSocket();
+		} catch (IOException e) {
 			System.out.println("Error al cerrar el smLoc");
 		}
-		smLoc=null;
-		
+		smLoc = null;
+
 	}
 
 	/**

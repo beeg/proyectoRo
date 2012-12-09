@@ -62,12 +62,17 @@ public class Medida {
 	}
 
 	public String toString() {
-		return date.getDate()+"/"+(date.getMonth()+1)+"/"+(date.getYear()+1900)+";"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+";"+latitud+"-"+longitud+";"+valor;
+		return date.getDate() + "/" + (date.getMonth() + 1) + "/"
+				+ (date.getYear() + 1900) + ";" + date.getHours() + ":"
+				+ date.getMinutes() + ":" + date.getSeconds() + ";" + latitud
+				+ "-" + longitud + ";" + valor;
 	}
 
 	public static void main(String[] args) {
-		/*Medida m = new Medida(1,new Date(),"lat","long",90);
-		System.out.println(m.toString());*/
+		/*
+		 * Medida m = new Medida(1,new Date(),"lat","long",90);
+		 * System.out.println(m.toString());
+		 */
 	}
 
 }

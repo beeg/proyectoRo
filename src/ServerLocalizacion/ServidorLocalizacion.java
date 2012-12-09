@@ -26,7 +26,7 @@ public class ServidorLocalizacion {
 				SesionLocalizacion s = new SesionLocalizacion(sm, this);
 				lSesiones.add(s);
 				new Thread(s).start();
-			}  
+			}
 		} catch (IOException e) {
 			System.out.println("Error en el servidor de localización");
 		}
@@ -47,7 +47,8 @@ public class ServidorLocalizacion {
 	public void setlSesiones(ArrayList<SesionLocalizacion> lSesiones) {
 		this.lSesiones = lSesiones;
 	}
-	public static void main(String []args){
+
+	public static void main(String[] args) {
 		new ServidorLocalizacion().activarServidor();
 	}
 

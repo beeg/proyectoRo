@@ -36,6 +36,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 	private Color red;
 	private Cliente c;
 	private SocketManager sm;
+	boolean usuarioConfirmado;
 
 	public VentanaLogin() {
 		// Creacion de Componentes
@@ -58,6 +59,7 @@ public class VentanaLogin extends JFrame implements ActionListener {
 		bLogin.addActionListener(this);
 		bCancelar = new JButton("Cancelar");
 		bCancelar.addActionListener(this);
+		usuarioConfirmado = false;
 
 		// Creacion de panel
 		Container panel = new JPanel();
@@ -130,29 +132,47 @@ public class VentanaLogin extends JFrame implements ActionListener {
 					sm = new SocketManager(ip.getText(), 5888);
 					c = new Cliente(sm);
 				}
-				mensaje = c.userLogin(this.nick.getText());
-				if (mensaje.contains("201")) {
-					mensajes.setBackground(green);
-					mensajes.setText(mensaje);
+				if (!usuarioConfirmado) {
+					mensaje = c.userLogin(this.nick.getText());
+					if (mensaje.contains("201")) {
+						usuarioConfirmado = true;
+						nick.setEnabled(false);
+						mensajes.setBackground(green);
+						mensajes.setText(mensaje);
+						mensaje = c.passLogin(this.password.getText());
+						if (mensaje.contains("202")) {
+							VentanaMenu vm = new VentanaMenu(c);
+							vm.setVisible(true);
+							this.dispose();
+						} else {
+							JOptionPane.showMessageDialog(this, mensaje,
+									"Error al logear",
+									JOptionPane.ERROR_MESSAGE);
+						}
+					} else {
+						if (mensaje.contains("444")) {
+							JOptionPane
+									.showMessageDialog(this, mensaje,
+											"Servidor lleno",
+											JOptionPane.ERROR_MESSAGE);
+							c = null;
+							sm.CerrarStreams();
+							sm.CerrarSocket();
+						} else {
+							mensajes.setBackground(red);
+							mensajes.setText(mensaje);
+							JOptionPane.showMessageDialog(this, mensaje,
+									"Error al logear",
+									JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				} else {
 					mensaje = c.passLogin(this.password.getText());
 					if (mensaje.contains("202")) {
 						VentanaMenu vm = new VentanaMenu(c);
 						vm.setVisible(true);
 						this.dispose();
 					} else {
-						JOptionPane.showMessageDialog(this, mensaje,
-								"Error al logear", JOptionPane.ERROR_MESSAGE);
-					}
-				} else {
-					if (mensaje.contains("444")) {
-						JOptionPane.showMessageDialog(this, mensaje,
-								"Servidor lleno", JOptionPane.ERROR_MESSAGE);
-						c = null;
-						sm.CerrarStreams();
-						sm.CerrarSocket();
-					} else {
-						mensajes.setBackground(red);
-						mensajes.setText(mensaje);
 						JOptionPane.showMessageDialog(this, mensaje,
 								"Error al logear", JOptionPane.ERROR_MESSAGE);
 					}
