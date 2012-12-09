@@ -257,119 +257,120 @@ public class VentanaMenu extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent a) {
 		Object o = a.getSource();
-		if(o==bListSensor){
-			try	{
-			ArrayList<String>sensores=c.listSensor();
-			for(int i=0;i<sensores.size();i++){
-				System.out.println(sensores.get(i));
-			}
-			VentanaListSensor v = new VentanaListSensor(sensores);
-			v.setVisible(true);
-			} catch(IOException e)	{
-				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
-			}
-		}else if(o==bHistorico){
-			try	{
-			ArrayList<String>medidas=c.historico(tID.getText());
-			if(medidas.get(0).contains("113"))	{ //Correcto
-				VentanaHistorico v = new VentanaHistorico(medidas);
+		if (o == bListSensor) {
+			try {
+				ArrayList<String> sensores = c.listSensor();
+				for (int i = 0; i < sensores.size(); i++) {
+					System.out.println(sensores.get(i));
+				}
+				VentanaListSensor v = new VentanaListSensor(sensores);
 				v.setVisible(true);
-			} else if (medidas.get(0).contains("414")) {
-				lMensaje.setText("414 ERR Sensor desconocido");
-				lMensaje.setForeground(new Color(255,0,0));
-			} else if(medidas.get(0).contains("415"))	{
-				lMensaje.setText("415 ERR Falta parámetro id_sensor");
-				lMensaje.setForeground(new Color(255,0,0));
-			}	} catch(IOException e)	{
+			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 			}
-		}else if(o==bOnSensor){
-			try	{
-			String resultado=c.onSensor(tID.getText());
-			lMensaje.setText(resultado);
-			if(resultado.contains("203"))	{//OK
-				lMensaje.setForeground(new Color(50,205,50));
-			} else	{
-				lMensaje.setForeground(new Color(255,0,0));
-			}			
-			} catch(IOException e)	{
+		} else if (o == bHistorico) {
+			try {
+				ArrayList<String> medidas = c.historico(tID.getText());
+				if (medidas.get(0).contains("113")) { // Correcto
+					VentanaHistorico v = new VentanaHistorico(medidas);
+					v.setVisible(true);
+				} else if (medidas.get(0).contains("414")) {
+					lMensaje.setText("414 ERR Sensor desconocido");
+					lMensaje.setForeground(new Color(255, 0, 0));
+				} else if (medidas.get(0).contains("415")) {
+					lMensaje.setText("415 ERR Falta parámetro id_sensor");
+					lMensaje.setForeground(new Color(255, 0, 0));
+				}
+			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 			}
-		}else if(o==bOffSensor){
-			try	{
-			String resultado=c.offSensor(tID.getText());
-			lMensaje.setText(resultado);
-			if(resultado.contains("204"))	{
-				lMensaje.setForeground(new Color(50,205,50));
-			} else	{
-				lMensaje.setForeground(new Color(255,0,0));
-			}
-			} catch(IOException e)	{
+		} else if (o == bOnSensor) {
+			try {
+				String resultado = c.onSensor(tID.getText());
+				lMensaje.setText(resultado);
+				if (resultado.contains("203")) {// OK
+					lMensaje.setForeground(new Color(50, 205, 50));
+				} else {
+					lMensaje.setForeground(new Color(255, 0, 0));
+				}
+			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 			}
-		}else if(o==bValAct){
-			try	{
-			String resultado=c.getValAct(tID.getText());
-			lMensaje.setText(resultado);
-			if(resultado.contains("114"))	{
-				lMensaje.setForeground(new Color(50,205,50));
-			} else	{
-				lMensaje.setForeground(new Color(255,0,0));
-			}
-			} catch(IOException e)	{
+		} else if (o == bOffSensor) {
+			try {
+				String resultado = c.offSensor(tID.getText());
+				lMensaje.setText(resultado);
+				if (resultado.contains("204")) {
+					lMensaje.setForeground(new Color(50, 205, 50));
+				} else {
+					lMensaje.setForeground(new Color(255, 0, 0));
+				}
+			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 			}
-		}else if(o==bFoto){
+		} else if (o == bValAct) {
+			try {
+				String resultado = c.getValAct(tID.getText());
+				lMensaje.setText(resultado);
+				if (resultado.contains("114")) {
+					lMensaje.setForeground(new Color(50, 205, 50));
+				} else {
+					lMensaje.setForeground(new Color(255, 0, 0));
+				}
+			} catch (IOException e) {
+				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
+				lMensaje.setForeground(new Color(255, 0, 0));
+			}
+		} else if (o == bFoto) {
 			try {
 				ImageIcon i = c.getFoto();
-				if(i==null)	{
+				if (i == null) {
 					lMensaje.setText("420 ERR GPS en estado OFF.");
-					lMensaje.setForeground(new Color(255,0,0));
-				} else	{
-					VentanaFoto v = new VentanaFoto(c,this,i);
+					lMensaje.setForeground(new Color(255, 0, 0));
+				} else {
+					VentanaFoto v = new VentanaFoto(c, this, i);
 					v.setVisible(true);
 				}
 			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 			}
-		}else if(o==bOnGps)	{
-			try	{
-			String resultado=c.ONGPS();
-			lMensaje.setText(resultado);
-			if(resultado.contains("205"))	{
-				lMensaje.setForeground(new Color(50,205,50));
-			} else	{
-				lMensaje.setForeground(new Color(255,0,0));
-			}
-			} catch(IOException e)	{
+		} else if (o == bOnGps) {
+			try {
+				String resultado = c.ONGPS();
+				lMensaje.setText(resultado);
+				if (resultado.contains("205")) {
+					lMensaje.setForeground(new Color(50, 205, 50));
+				} else {
+					lMensaje.setForeground(new Color(255, 0, 0));
+				}
+			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 			}
-		}else if(o==bOffGps) {
-			try	{
-			String resultado=c.OFFGPS();
-			lMensaje.setText(resultado);
-			if(resultado.contains("206"))	{
-				lMensaje.setForeground(new Color(50,205,50));
-			} else	{
-				lMensaje.setForeground(new Color(255,0,0));
-			}
-			} catch(IOException e)	{
+		} else if (o == bOffGps) {
+			try {
+				String resultado = c.OFFGPS();
+				lMensaje.setText(resultado);
+				if (resultado.contains("206")) {
+					lMensaje.setForeground(new Color(50, 205, 50));
+				} else {
+					lMensaje.setForeground(new Color(255, 0, 0));
+				}
+			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 			}
-		}else if(o==bSalir){
+		} else if (o == bSalir) {
 			try {
 				c.SALIR();
 			} catch (IOException e) {
 				lMensaje.setText("ERR: El usuario ha sido desconectado del servidor.");
-				lMensaje.setForeground(new Color(255,0,0));
+				lMensaje.setForeground(new Color(255, 0, 0));
 				System.out.println("Error al salir");
 				e.printStackTrace();
 			}

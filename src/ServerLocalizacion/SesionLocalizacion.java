@@ -21,9 +21,9 @@ public class SesionLocalizacion implements Runnable {
 		actualUser = new Usuario("Desconocido", "");
 		estado = 0;
 		this.server = server;
-		terminar=false;
-		mensajeCliente="";
-		mensajeEnviar="";
+		terminar = false;
+		mensajeCliente = "";
+		mensajeEnviar = "";
 	}
 
 	@Override

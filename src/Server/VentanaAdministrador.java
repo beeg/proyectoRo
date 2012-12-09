@@ -169,8 +169,6 @@ public class VentanaAdministrador extends JFrame implements ActionListener {
 				dispose();
 			}
 		});
-		// this.setIconImage(new
-		// ImageIcon(getClass().getResource("/icono.jpg")).getImage());
 		cargarUsuarios();
 	}
 
