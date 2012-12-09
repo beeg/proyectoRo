@@ -90,6 +90,11 @@ public class VentanaHistorico extends JFrame {
 		pack();
 	}
 
+	/**
+	 * Método para corresponder la carga de datos con el formato de la JTable
+	 * @param medidas
+	 * @return
+	 */
 	public String[][] tratarMedidas(ArrayList<String> medidas) {
 		String[][] m = new String[medidas.size()][5];
 		medidas.remove(medidas.size() - 1);

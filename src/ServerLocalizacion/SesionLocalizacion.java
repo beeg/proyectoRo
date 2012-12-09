@@ -98,7 +98,6 @@ public class SesionLocalizacion implements Runnable {
 	 * @param parametro
 	 */
 	public void tratarUser(String parametro) {
-		@SuppressWarnings("unused")
 		boolean encontrado = false;
 		GestorBD gestor = GestorBD.getInstance();
 		gestor.conectar();
@@ -149,6 +148,10 @@ public class SesionLocalizacion implements Runnable {
 		}
 	}
 
+	/**
+	 * Gestiona la obtencion de las coordenadas actuales
+	 * @param parametro
+	 */
 	public void tratarGetCorr(String parametro) {
 		System.out.println("paso por aquí?");
 		try {

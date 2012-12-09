@@ -1,10 +1,7 @@
 package Client;
 
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
-
-import Server.Sensor;
 
 public class VentanaListSensor extends JFrame {
 
@@ -90,6 +87,11 @@ public class VentanaListSensor extends JFrame {
 		pack();
 	}
 
+	/**
+	 * Método para corresponder el formato de los datos con el de la JTable
+	 * @param l
+	 * @return
+	 */
 	public String[][] listaSensores(ArrayList<String> l) {
 		l.remove(l.size() - 1); // Elimina el último
 		l.remove(0); // Elimina el primero

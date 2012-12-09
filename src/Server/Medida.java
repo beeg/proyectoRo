@@ -1,9 +1,6 @@
 package Server;
 
-import java.util.ArrayList;
 import java.util.Date;
-
-import DB.GestorBD;
 
 public class Medida {
 	private int id;

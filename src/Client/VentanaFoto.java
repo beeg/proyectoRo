@@ -154,7 +154,6 @@ public class VentanaFoto extends JFrame implements ActionListener {
 				} else if (mensaje.contains("417") || mensaje.contains("418")) {
 					lMensaje.setForeground(new Color(255, 0, 0));
 				}
-				bGetLoc.disable();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

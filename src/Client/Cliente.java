@@ -13,10 +13,20 @@ public class Cliente {
 	private String login;
 	private String pass;
 
+	/**
+	 * Constructor que recibe un SocketManager por parametro
+	 * @param sm
+	 */
 	public Cliente(SocketManager sm) {
 		this.sm = sm;
 	}
 
+	/**
+	 * Comando USER
+	 * Envía al servidor el nick del usuario y devuelve la respuesta del servidor
+	 * @param user
+	 * @return
+	 */
 	public String userLogin(String user) {
 		try {
 			System.out.println(user);
@@ -29,6 +39,12 @@ public class Cliente {
 		return mensajeServer;
 	}
 
+	/**
+	 * Comando PASS
+	 * Envía al servidor la contrasenya del usuario y devuelve la respuesta del servidor
+	 * @param pass
+	 * @return
+	 */
 	public String passLogin(String pass) {
 		try {
 			sm.Escribir("PASS " + pass + '\n');
@@ -40,7 +56,10 @@ public class Cliente {
 	}
 
 	/**
-	 * Metodo para mandar el comando LISTSENSOR
+	 * Comando LISTSENSOR
+	 * Pide al servidor la lista de los sensores del vehiculo conectado.
+	 * @return
+	 * @throws IOException
 	 */
 	public ArrayList<String> listSensor() throws IOException {
 		ArrayList<String> listaMensajes = new ArrayList<String>();
@@ -54,6 +73,13 @@ public class Cliente {
 		return listaMensajes;
 	}
 
+	/**
+	 * Comando GET_VALACT
+	 * Solicita al servidor la ultima medida del sensor indicado por parametro
+	 * @param id_sensor
+	 * @return
+	 * @throws IOException
+	 */
 	public String getValAct(String id_sensor) throws IOException {
 		String mensajeLeido = "";
 		sm.Escribir("GET_VALACT " + id_sensor + '\n');
@@ -62,9 +88,12 @@ public class Cliente {
 	}
 
 	/**
-	 * Metodo para recuperar todas las medidas de un sensor. HISTORIDO id_sensor
-	 * 
+	 * Comando HISTORICO
+	 * Solicita al servidor todas las medidas de un determinado sensor, este especificado
+	 * por parametro
 	 * @param idSensor
+	 * @return
+	 * @throws IOException
 	 */
 	public ArrayList<String> historico(String idSensor) throws IOException {
 		ArrayList<String> medidas = new ArrayList<String>();
@@ -86,9 +115,11 @@ public class Cliente {
 	}
 
 	/**
-	 * Metodo para activar un sensor. ON id_sensor
-	 * 
+	 * Comando ON id_sensor
+	 * Solicita al servidor la activación de un determinado sensor
 	 * @param idSensor
+	 * @return
+	 * @throws IOException
 	 */
 	public String onSensor(String idSensor) throws IOException {
 		String primerMensaje = "";
@@ -99,9 +130,12 @@ public class Cliente {
 	}
 
 	/**
-	 * Metodo para desactivar un sensor. OFF id_sensor
-	 * 
+	 * Comando OFF id_sensor
+	 * Solicita al servidor la desactivación de un determinado sensor, este especificado
+	 * por parametro
 	 * @param idSensor
+	 * @return
+	 * @throws IOException
 	 */
 	public String offSensor(String idSensor) throws IOException {
 		String primerMensaje = "";
@@ -111,6 +145,12 @@ public class Cliente {
 		return primerMensaje;
 	}
 
+	/**
+	 * Comando ONGPS
+	 * Solicita al servidor la activación del GPS del vehiculo
+	 * @return
+	 * @throws IOException
+	 */
 	public String ONGPS() throws IOException {
 		String resultado = "";
 		sm.Escribir("ONGPS\n");
@@ -119,6 +159,12 @@ public class Cliente {
 		return resultado;
 	}
 
+	/**
+	 * Comando OFFGPS
+	 * Solicita al servidor la desactivacion del GPS del vehiculo
+	 * @return
+	 * @throws IOException
+	 */
 	public String OFFGPS() throws IOException {
 		String resultado = "";
 		sm.Escribir("OFFGPS\n");
@@ -127,6 +173,12 @@ public class Cliente {
 		return resultado;
 	}
 
+	/**
+	 * Comando GET_FOTO
+	 * Solicita al servidor una foto geolocalizada
+	 * @return
+	 * @throws IOException
+	 */
 	public ImageIcon getFoto() throws IOException {
 		ImageIcon img = null;
 		String mensajeLeido = "";
@@ -140,6 +192,12 @@ public class Cliente {
 		return img;
 	}
 
+	/**
+	 * Comando GET_LOC
+	 * Solicita al servidor las coordenadas actuales del vehiculo
+	 * @return
+	 * @throws IOException
+	 */
 	public String getLoc() throws IOException {
 		String mensajeLeido = "";
 		sm.Escribir("GET_LOC\n");
@@ -148,6 +206,11 @@ public class Cliente {
 		return mensajeLeido;
 	}
 
+	/**
+	 * Comando SALIR
+	 * Permite salir del sistema
+	 * @throws IOException
+	 */
 	public void SALIR() throws IOException {
 		sm.Escribir("SALIR\n");
 		mensajeServer = sm.Leer();

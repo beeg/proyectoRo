@@ -19,6 +19,9 @@ public class ServidorLocalizacion {
 		}
 	}
 
+	/**
+	 * Activa el servidor de localizacion
+	 */
 	public void activarServidor() {
 		try {
 			while (true) {

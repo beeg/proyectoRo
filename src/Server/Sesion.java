@@ -4,11 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import ServerLocalizacion.ServidorLocalizacion;
 import Util.SocketManager;
-
-import Client.Cliente;
 import DB.GestorBD;
 
 public class Sesion implements Runnable {
@@ -506,6 +502,9 @@ public class Sesion implements Runnable {
 
 	}
 
+	/**
+	 * Cierra la conexion con el servidor de localizacion
+	 */
 	public void terminarSesLocSocket() {
 		try {
 			smLoc.CerrarStreams();
@@ -514,7 +513,6 @@ public class Sesion implements Runnable {
 			System.out.println("Error al cerrar el smLoc");
 		}
 		smLoc = null;
-
 	}
 
 	/**
