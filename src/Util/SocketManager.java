@@ -78,17 +78,21 @@ public class SocketManager {
 	}
 
 	public void EscribirBytes(FileInputStream f) throws IOException {
-		bufferEscritura.writeInt(f.available());
+		String s=f.available()+"";
+		Escribir(s+'\n');
+		//bufferEscritura.writeInt(f.available());
 		byte[] buffer = new byte[1024];
 		int bytes = 0;
 		while ((bytes = f.read(buffer)) != -1) {
 			Escribir(buffer, bytes);
 		}
+		bufferEscritura.flush();
 	}
 
 	public byte[] LeerBytes() throws IOException {
+		String l = bufferLectura.readLine();
 		DataInputStream data = new DataInputStream(mySocket.getInputStream());
-		byte[] buffer = new byte[data.readInt()];
+		byte[] buffer = new byte[Integer.parseInt(l)];
 		data.readFully(buffer);
 		return buffer;
 	}
